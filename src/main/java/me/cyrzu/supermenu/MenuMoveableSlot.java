@@ -12,16 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 
-public class MenuMoveableSlot {
-
-    private final @Nullable BiFunction<Player, ItemStack, Boolean> put;
-
-    private final @Nullable BiFunction<Player, ItemStack, Boolean> take;
-
-    public MenuMoveableSlot(@Nullable BiFunction<Player, ItemStack, Boolean> put, @Nullable BiFunction<Player, ItemStack, Boolean> take) {
-        this.put = put;
-        this.take = take;
-    }
+public record MenuMoveableSlot(@Nullable BiFunction<Player, ItemStack, Boolean> put, @Nullable BiFunction<Player, ItemStack, Boolean> take) {
 
     private boolean canPut(Player player, @NotNull ItemStack stack) {
         return put == null || stack.getType().isAir() || put.apply(player, stack);
@@ -37,10 +28,10 @@ public class MenuMoveableSlot {
     }
 
     public boolean canMove(Player player, InventoryEvent event) {
-        if(event instanceof InventoryClickEvent) {
-            return canMove(player, (InventoryClickEvent) event);
-        } else if(event instanceof InventoryDragEvent) {
-            return canMove(player, (InventoryDragEvent) event);
+        if(event instanceof InventoryClickEvent click) {
+            return canMove(player, click);
+        } else if(event instanceof InventoryDragEvent drag) {
+            return canMove(player, drag);
         }
         return false;
     }
@@ -49,31 +40,14 @@ public class MenuMoveableSlot {
         PlayerInventory playerInventory = player.getInventory();
         ClickType click = event.getClick();
 
-        switch (click) {
-            case LEFT:
-            case RIGHT:
-                return check(player, event.getCursor(), event.getCurrentItem());
-            case DROP:
-            case CONTROL_DROP:
-                return check(player, null, event.getCurrentItem());
-            case NUMBER_KEY:
-                return check(player, playerInventory.getItem(event.getHotbarButton()), event.getCurrentItem());
-            case SWAP_OFFHAND:
-                return check(player, playerInventory.getItemInOffHand(), event.getCurrentItem());
-            case CREATIVE:
-                return true;
-            default:
-                return false;
-        }
-
-//        return switch (click) {
-//            case LEFT, RIGHT -> check(player, event.getCursor(), event.getCurrentItem());
-//            case DROP, CONTROL_DROP -> check(player, null, event.getCurrentItem());
-//            case NUMBER_KEY -> check(player, playerInventory.getItem(event.getHotbarButton()), event.getCurrentItem());
-//            case SWAP_OFFHAND -> check(player, playerInventory.getItemInOffHand(), event.getCurrentItem());
-//            case CREATIVE -> true;
-//            default -> false;
-//        };
+        return switch (click) {
+            case LEFT, RIGHT -> check(player, event.getCursor(), event.getCurrentItem());
+            case DROP, CONTROL_DROP -> check(player, null, event.getCurrentItem());
+            case NUMBER_KEY -> check(player, playerInventory.getItem(event.getHotbarButton()), event.getCurrentItem());
+            case SWAP_OFFHAND -> check(player, playerInventory.getItemInOffHand(), event.getCurrentItem());
+            case CREATIVE -> true;
+            default -> false;
+        };
     }
 
     private boolean canMove(Player player, @NotNull InventoryDragEvent event) {

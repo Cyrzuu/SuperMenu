@@ -1,7 +1,5 @@
 package me.cyrzu.supermenu.inventory;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import me.cyrzu.supermenu.MenuManager;
 import me.cyrzu.supermenu.MenuMoveableSlot;
@@ -29,7 +27,7 @@ public abstract class MenuHandler {
 
     protected final @NotNull Inventory inventory;
 
-    protected final @NotNull Int2ObjectMap<ButtonHandler> buttons;
+    protected final @NotNull Map<Integer, ButtonHandler> buttons;
 
     private final @NotNull Map<Integer, MenuMoveableSlot> moveableSlots;
 
@@ -49,7 +47,7 @@ public abstract class MenuHandler {
     public MenuHandler(int rows, String title) {
         this.menuManager = MenuManager.getManager();
         this.inventory = Bukkit.createInventory(null, Math.min(6, rows) * 9, title);
-        this.buttons = new Int2ObjectOpenHashMap<>();
+        this.buttons = new HashMap<>();
         this.moveableSlots = new HashMap<>();
         this.cooldown = new HashMap<>();
     }
