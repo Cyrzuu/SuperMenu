@@ -31,7 +31,7 @@ public abstract class MenuHandler {
 
     protected final @NotNull Int2ObjectMap<ButtonHandler> buttons;
 
-    private final @NotNull Int2ObjectMap<MenuMoveableSlot> moveableSlots;
+    private final @NotNull Map<Integer, MenuMoveableSlot> moveableSlots;
 
     protected @Nullable MenuTask menuTask = null;
 
@@ -50,7 +50,7 @@ public abstract class MenuHandler {
         this.menuManager = MenuManager.getManager();
         this.inventory = Bukkit.createInventory(null, Math.min(6, rows) * 9, title);
         this.buttons = new Int2ObjectOpenHashMap<>();
-        this.moveableSlots = new Int2ObjectOpenHashMap<>();
+        this.moveableSlots = new HashMap<>();
         this.cooldown = new HashMap<>();
     }
 
