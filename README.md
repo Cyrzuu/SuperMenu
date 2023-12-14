@@ -22,6 +22,6 @@ repositories {
 }
 
 dependencies {
-        implementation 'com.github.Cyrzuu:SuperMenu:Tag'
+        implementation 'com.github.Cyrzuu:SuperMenu:1.0.6'
 }
 ```
