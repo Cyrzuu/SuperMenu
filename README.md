@@ -49,7 +49,6 @@ public void setGameMode(Player target) {
                     }
             ));
 
-
     fastMenu.start().open(target);
 }
 ```
