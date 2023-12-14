@@ -1,4 +1,4 @@
-Wow coooooo 😮😎
+Wow coooooo 😮😎 [![](https://jitpack.io/v/Cyrzuu/SuperMenu.svg)](https://jitpack.io/#Cyrzuu/SuperMenu)
 
 **Maven:** 
 ```xml
@@ -10,7 +10,7 @@ Wow coooooo 😮😎
 <dependency>
     <groupId>com.github.Cyrzuu</groupId>
     <artifactId>SuperMenu</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-        implementation 'com.github.Cyrzuu:SuperMenu:1.0.6'
+        implementation 'com.github.Cyrzuu:SuperMenu:1.1.1'
 }
 ```
 
