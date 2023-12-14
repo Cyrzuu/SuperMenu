@@ -2,11 +2,13 @@ package me.cyrzu.supermenu.inventory;
 
 import me.cyrzu.supermenu.button.ButtonHandler;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public class FastMenu extends MenuHandler {
@@ -22,6 +24,11 @@ public class FastMenu extends MenuHandler {
     @Override
     public FastMenu setButton(int slot, ButtonHandler button) {
         super.setButton(slot, button);
+        return this;
+    }
+
+    public FastMenu onClose(BiConsumer<@NotNull Player, @NotNull Inventory> action) {
+        super.onClose(action);
         return this;
     }
 
@@ -56,9 +63,9 @@ public class FastMenu extends MenuHandler {
         return this;
     }
 
-    @Override
-    public FastMenu setPermission(@NotNull Permission permission) {
-        super.setPermission(permission);
+
+    public FastMenu setPermission(@NotNull String permission) {
+        super.setPermission(new Permission(permission));
         return this;
     }
 

@@ -15,9 +15,8 @@ import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 
@@ -30,6 +29,8 @@ public abstract class MenuHandler {
     protected final @NotNull Map<Integer, ButtonHandler> buttons;
 
     private final @NotNull Map<Integer, MenuMoveableSlot> moveableSlots;
+
+    private @Nullable BiConsumer<@NotNull Player, @NotNull Inventory> close;
 
     protected @Nullable MenuTask menuTask = null;
 
@@ -55,6 +56,11 @@ public abstract class MenuHandler {
     public final void onClick(@NotNull Player player, @NotNull InventoryClickEvent event) {
         ButtonHandler button = buttons.get(event.getRawSlot());
         if(button != null) button.runClick(player, event);
+    }
+
+    public MenuHandler onClose(@NotNull BiConsumer<@NotNull Player, @NotNull Inventory> action) {
+        this.close = action;
+        return this;
     }
 
     public MenuHandler setButton(int slot, ButtonHandler buttonHandler) {
@@ -136,8 +142,16 @@ public abstract class MenuHandler {
         return this;
     }
 
-    public final void open(Player player) {
+    public final void open(@NotNull Player player) {
         player.openInventory(inventory);
+    }
+
+    public final void open(Player... players) {
+        Arrays.stream(players).filter(Objects::nonNull).forEach(this::open);
+    }
+
+    public final void open(Collection<Player> players) {
+        players.stream().filter(Objects::nonNull).forEach(this::open);
     }
 
     public final @NotNull Inventory getInventory() {
@@ -164,5 +178,19 @@ public abstract class MenuHandler {
         }
     }
 
+    public final void onClose(@NotNull Player player) {
+        if(close != null) {
+            close.accept(player, this.inventory);
+        }
+    }
+
+    public int randomSlot() {
+        Random random = new Random();
+        return random.nextInt(inventory.getSize());
+    }
+
+    public void unregister() {
+        MenuManager.getManager().unregister(this);
+    }
 
 }

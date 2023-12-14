@@ -53,6 +53,10 @@ public class MenuListeners implements Listener {
                 return;
             }
 
+            if(!inventory.hasPermission(player)) {
+                return;
+            }
+
             inventory.onClick(player, event);
         }
     }
