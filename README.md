@@ -25,3 +25,57 @@ dependencies {
         implementation 'com.github.Cyrzuu:SuperMenu:1.0.6'
 }
 ```
+
+
+
+
+
+
+
+
+
+```java
+public void setGameMode(Player target) {
+    FastMenu fastMenu = new FastMenu(1, "Set gamemode");
+
+    fastMenu.setButton(3,
+            new ItemButton(displayName(new ItemStack(Material.IRON_SWORD), "Survival"),
+                    (player, state) -> {
+                        if(player.hasPermission("gamemode.survival")) player.setGameMode(GameMode.SURVIVAL);
+                        else player.sendMessage("No permission!");
+                    }
+            ));
+
+    fastMenu.setButton(5,
+            new ItemButton(displayName(new ItemStack(Material.GRASS), "Creative"),
+                    (player, state) -> {
+                        if(player.hasPermission("gamemode.creative")) player.setGameMode(GameMode.CREATIVE);
+                        else player.sendMessage("No permission!");
+                    }
+            ));
+
+
+    fastMenu.start().open(target);
+}
+```
+
+```java
+public void eventGame() {
+    FastMenu fastMenu = new FastMenu(6, "First come first served");
+    int randomSlot = fastMenu.randomSlot();
+
+    fastMenu.setMoveableSlot(randomSlot,
+        (player, stack) -> false, /*Disable put*/
+        ((player, stack) -> { /*Can take only diamond*/
+            if(stack.getType() == Material.DIAMOND) {
+                Bukkit.broadcastMessage(String.format("%s was the first!", player.getName()));
+                return true;
+            }
+
+            return false;
+        }));
+    fastMenu.setItem(randomSlot, new ItemStack(Material.DIAMOND));
+
+    fastMenu.start().open(new ArrayList<>(Bukkit.getOnlinePlayers()));
+}
+    ```
