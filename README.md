@@ -55,22 +55,27 @@ public void setGameMode(Player target) {
 ```
 
 ```java
-public void eventGame() {
-    FastMenu fastMenu = new FastMenu(6, "First come first served");
-    int randomSlot = fastMenu.randomSlot();
+    public void eventGame() {
+        FastMenu fastMenu = new FastMenu(6, "First come first served");
+        int randomSlot = fastMenu.randomSlot();
 
-    fastMenu.setMoveableSlot(randomSlot,
-        (player, stack) -> false, /*Disable put*/
-        ((player, stack) -> { /*Can take only diamond*/
-            if(stack.getType() == Material.DIAMOND) {
-                Bukkit.broadcastMessage(String.format("%s was the first!", player.getName()));
-                return true;
+        fastMenu.setMoveableSlot(randomSlot,
+            (player, stack) -> false, /*Disable put*/
+            ((player, stack) -> { /*Can take only diamond*/
+                if(stack.getType() == Material.DIAMOND) {
+                    Bukkit.broadcastMessage(String.format("%s was the first!", player.getName()));
+                    return true;
+                }
+
+                return false;
+            }));
+        fastMenu.setItem(randomSlot, new ItemStack(Material.DIAMOND));
+
+        fastMenu.onClose(((player, inventory) -> {
+            if(inventory.getViewers().size() <= 1) {
+                fastMenu.unregister();
             }
-
-            return false;
         }));
-    fastMenu.setItem(randomSlot, new ItemStack(Material.DIAMOND));
-
-    fastMenu.start().open(new ArrayList<>(Bukkit.getOnlinePlayers()));
-}
-    ```
+        
+        fastMenu.setUnregisterOnClose(false).start().open(new ArrayList<>(Bukkit.getOnlinePlayers()));
+    }
