@@ -69,6 +69,7 @@ public void setGameMode(Player target) {
 
                 return false;
             }));
+
         fastMenu.setItem(randomSlot, new ItemStack(Material.DIAMOND));
 
         fastMenu.onClose(((player, inventory) -> {
