@@ -29,6 +29,7 @@ dependencies {
 ```
 
 
+
 Register
 ```java
 public class Plugin extends JavaPlugin {
