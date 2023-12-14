@@ -1,4 +1,5 @@
-Wow coooooo 😮😎\n
+Wow coooooo 😮😎
+
 [![](https://jitpack.io/v/Cyrzuu/SuperMenu.svg)](https://jitpack.io/#Cyrzuu/SuperMenu)
 
 **Maven:** 
