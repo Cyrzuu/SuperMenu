@@ -56,9 +56,10 @@ public class MenuManager {
     }
 
     public void unregister(@NotNull MenuHandler handler) {
+        inventories.remove(handler.getInventory());
+
         handler.cancelTask();
         new ArrayList<>(handler.getInventory().getViewers()).forEach(HumanEntity::closeInventory);
-        inventories.remove(handler.getInventory());
     }
 
     public @Nullable MenuHandler getMenuHandler(Inventory inventory) {
