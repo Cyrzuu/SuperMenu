@@ -31,6 +31,21 @@ dependencies {
 
 # ---------------------------------------
 
+Register
+```java
+public class Plugin extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        MenuManager.registerManager(this);
+
+        //code
+    } 
+
+} 
+```
+
+Example 
 ```java
 public void setGameMode(Player target) {
     FastMenu fastMenu = new FastMenu(1, "Set gamemode");
