@@ -72,7 +72,7 @@ public class MenuListeners implements Listener {
                 MenuMoveableSlot moveableSlot = menuHandler.getMoveableSlot(slot);
                 if((moveableSlot == null || !moveableSlot.canMove(player, event)) && slot < size) event.setCancelled(true);
             });
-        }else if(menuHandler != null && event.getRawSlots().stream().anyMatch(slot -> slot < size)) {
+        } else if(menuHandler != null && event.getRawSlots().stream().anyMatch(slot -> slot < size)) {
             event.setCancelled(true);
         }
     }
