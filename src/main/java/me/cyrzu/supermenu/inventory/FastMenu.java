@@ -77,16 +77,12 @@ public class FastMenu extends MenuHandler {
 
     @Override
     public FastMenu setAllSlots(@NotNull ItemStack stack) {
-        return setAllSlots(stack, new int[0]);
+        return setAllSlots(stack, new Integer[0]);
     }
 
     @Override
-    public FastMenu setAllSlots(@NotNull ItemStack stack, int... ignore) {
-
-        for (int i = 0; i < inventory.getSize(); i++) {
-            inventory.setItem(i, stack);
-        }
-
+    public FastMenu setAllSlots(@NotNull ItemStack stack, @NotNull Integer... ignore) {
+        super.setAllSlots(stack, ignore);
         return this;
     }
 

@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 
 public abstract class MenuHandler {
@@ -190,12 +191,17 @@ public abstract class MenuHandler {
     }
 
     public MenuHandler setAllSlots(@NotNull ItemStack stack) {
-        return setAllSlots(stack, new int[0]);
+        return setAllSlots(stack, new Integer[0]);
     }
 
-    public MenuHandler setAllSlots(@NotNull ItemStack stack, int... ignore) {
+    public MenuHandler setAllSlots(@NotNull ItemStack stack, @NotNull Integer... ignore) {
+        Set<@NotNull Integer> collect = Arrays.stream(ignore).collect(Collectors.toSet());
 
         for (int i = 0; i < inventory.getSize(); i++) {
+            if(collect.contains(i)) {
+                continue;
+            }
+
             inventory.setItem(i, stack);
         }
 
