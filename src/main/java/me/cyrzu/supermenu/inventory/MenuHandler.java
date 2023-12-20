@@ -189,6 +189,23 @@ public abstract class MenuHandler {
         return random.nextInt(inventory.getSize());
     }
 
+    public MenuHandler setAllSlots(@NotNull ItemStack stack) {
+        return setAllSlots(stack, new int[0]);
+    }
+
+    public MenuHandler setAllSlots(@NotNull ItemStack stack, int... ignore) {
+
+        for (int i = 0; i < inventory.getSize(); i++) {
+            inventory.setItem(i, stack);
+        }
+
+        return this;
+    }
+
+    public @Nullable ItemStack getStack(int slot) {
+        return inventory.getItem(slot);
+    }
+
     public void unregister() {
         MenuManager.getManager().unregister(this);
     }
