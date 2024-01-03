@@ -16,6 +16,7 @@ public class VarcharColumn extends AbstractColumn {
         StringBuilder builder = new StringBuilder(name + " VARCHAR(%s) CHARSET utf8".formatted(max));
         if(isPrimaryKey()) {
             builder.append(" PRIMARY KEY");
+
         } else {
             if(isUnique()) {
                 builder.append(" UNIQUE");
