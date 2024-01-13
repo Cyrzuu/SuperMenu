@@ -27,7 +27,7 @@ public class FastMenu extends MenuHandler {
         return this;
     }
 
-    public FastMenu onClose(BiConsumer<@NotNull Player, @NotNull Inventory> action) {
+    public FastMenu onClose(@NotNull BiConsumer<@NotNull Player, @NotNull Inventory> action) {
         super.onClose(action);
         return this;
     }
@@ -76,14 +76,26 @@ public class FastMenu extends MenuHandler {
     }
 
     @Override
-    public FastMenu fillSlots(@NotNull ItemStack stack) {
-        return fillSlots(stack, new Integer[0]);
+    public FastMenu fillAll(@NotNull ItemStack stack) {
+        return fillAll(stack, new Integer[0]);
     }
 
     @Override
-    public FastMenu fillSlots(@NotNull ItemStack stack, @NotNull Integer... ignore) {
-        super.fillSlots(stack, ignore);
+    public FastMenu fillAll(@NotNull ItemStack stack, @NotNull Integer... ignore) {
+        super.fillAll(stack, ignore);
         return this;
+    }
+
+    public void fillBorder(@NotNull ItemStack stack) {
+        int rows = inventory.getSize() / 9;
+        if (rows <= 2) {
+            return;
+        }
+
+        for (int i = 0; i < rows * 9; i++) {
+            if (i <= 8 || (i >= rows * 9 - 8 && i <= rows * 9 - 2) || i % 9 == 0 || i % 9 == 8)
+                inventory.setItem(i, stack);
+        }
     }
 
 }

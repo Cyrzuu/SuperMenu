@@ -190,11 +190,11 @@ public abstract class MenuHandler {
         return random.nextInt(inventory.getSize());
     }
 
-    public MenuHandler fillSlots(@NotNull ItemStack stack) {
-        return fillSlots(stack, new Integer[0]);
+    public MenuHandler fillAll(@NotNull ItemStack stack) {
+        return fillAll(stack, new Integer[0]);
     }
 
-    public MenuHandler fillSlots(@NotNull ItemStack stack, @NotNull Integer... ignore) {
+    public MenuHandler fillAll(@NotNull ItemStack stack, @NotNull Integer... ignore) {
         Set<@NotNull Integer> collect = Arrays.stream(ignore).collect(Collectors.toSet());
 
         for (int i = 0; i < inventory.getSize(); i++) {
@@ -206,18 +206,6 @@ public abstract class MenuHandler {
         }
 
         return this;
-    }
-
-    public void fillBorder(@NotNull ItemStack stack) {
-        int rows = inventory.getSize() / 9;
-        if (rows <= 2) {
-            return;
-        }
-
-        for (int i = 0; i < rows * 9; i++) {
-            if (i <= 8 || (i >= rows * 9 - 8 && i <= rows * 9 - 2) || i % 9 == 8 || i % 9 == 0)
-                inventory.setItem(i, stack);
-        }
     }
 
     public @Nullable ItemStack getStack(int slot) {
