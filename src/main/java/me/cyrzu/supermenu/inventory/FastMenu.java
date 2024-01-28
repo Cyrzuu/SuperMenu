@@ -27,24 +27,29 @@ public class FastMenu extends MenuHandler {
         return this;
     }
 
+    @Override
     public FastMenu onClose(@NotNull BiConsumer<@NotNull Player, @NotNull Inventory> action) {
         super.onClose(action);
         return this;
     }
 
+    @Override
     public FastMenu setItem(int slot, @NotNull ItemStack stack) {
         super.setItem(slot, stack);
         return this;
     }
 
+    @Override
     public FastMenu setMoveableSlot(int slot) {
         return setMoveableSlot(slot, null, null);
     }
 
+    @Override
     public FastMenu setMoveableSlot(int slot, @Nullable BiFunction<Player, ItemStack, Boolean> put) {
         return setMoveableSlot(slot, put, null);
     }
 
+    @Override
     public FastMenu setMoveableSlot(int slot, @Nullable BiFunction<Player, ItemStack, Boolean> put,
                                        @Nullable BiFunction<Player, ItemStack, Boolean> take) {
         super.setMoveableSlot(slot, put, take);

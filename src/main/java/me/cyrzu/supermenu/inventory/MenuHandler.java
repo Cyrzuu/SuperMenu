@@ -55,9 +55,12 @@ public abstract class MenuHandler {
     }
 
     public final void onClick(@NotNull Player player, @NotNull InventoryClickEvent event) {
+        onClick(event.getRawSlot());
         ButtonHandler button = buttons.get(event.getRawSlot());
         if(button != null) button.runClick(player, event);
     }
+
+    protected void onClick(int slot) { }
 
     public MenuHandler onClose(@NotNull BiConsumer<@NotNull Player, @NotNull Inventory> action) {
         this.close = action;
@@ -155,7 +158,8 @@ public abstract class MenuHandler {
         players.stream().filter(Objects::nonNull).forEach(this::open);
     }
 
-    public final @NotNull Inventory getInventory() {
+    @NotNull
+    public final Inventory getInventory() {
         return inventory;
     }
 
