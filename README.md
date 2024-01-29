@@ -61,7 +61,7 @@ public class Class {
                 ));
 
         fastMenu.setButton(5,
-                new ItemButton(new ItemStack(Material.GRASS),
+                new ItemButton(new ItemStack(Material.GRASS_BLOCK),
                         (player, state) -> {
                             if(player.hasPermission("gamemode.creative")) player.setGameMode(GameMode.CREATIVE);
                             else player.sendMessage("No permission!");
