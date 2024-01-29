@@ -10,7 +10,7 @@ import java.util.UUID;
 public class CooldownManager {
 
     private final Map<UUID, Long> cooldowns = new HashMap<>();
-    private final long cooldownMillis;
+    private long cooldownMillis;
 
     public CooldownManager(long cooldownMillis) {
         this.cooldownMillis = cooldownMillis;
@@ -31,6 +31,10 @@ public class CooldownManager {
 
     public void setCooldown(@NotNull UUID uuid) {
         cooldowns.put(uuid, System.currentTimeMillis());
+    }
+
+    public void setNewCooldown(long cooldown) {
+        this.cooldownMillis = cooldown;
     }
 
 }

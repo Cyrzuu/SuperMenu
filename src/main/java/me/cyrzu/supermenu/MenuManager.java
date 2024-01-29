@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -72,7 +73,10 @@ public class MenuManager {
     }
 
     public void unregisterAll() {
-        inventories.values().forEach(this::unregister);
+        Iterator<AbstractMenu> iterator = inventories.values().iterator();
+        while (iterator.hasNext()) {
+            unregister(iterator.next());
+        }
     }
 
     public void unregister(@NotNull AbstractMenu handler) {

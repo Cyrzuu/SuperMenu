@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
@@ -77,6 +78,10 @@ public abstract class AbstractMenu {
         this.close = canClose;
     }
 
+    public final void setCooldown(int time, TimeUnit unit) {
+        cooldown.setNewCooldown(unit.toMillis(time));
+    }
+
     public final void setTask(@NotNull Runnable runnable) {
         this.menuTask = new MenuTask(menuManager.getInstance(), runnable);
     }
@@ -122,7 +127,7 @@ public abstract class AbstractMenu {
 
     public final boolean hasCooldown(@NotNull Player player) {
         boolean b = cooldown.hasCooldown(player);
-        cooldown.setCooldown(player);
+        if(!b) cooldown.setCooldown(player);
         return b;
     }
 
