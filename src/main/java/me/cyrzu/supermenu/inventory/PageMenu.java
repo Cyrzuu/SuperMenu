@@ -91,7 +91,7 @@ public class PageMenu<E> extends AbstractMenu {
         return currentPage < pages;
     }
 
-    public boolean hasPreviosPage() {
+    public boolean hasPreviousPage() {
         return currentPage > 1;
     }
 
@@ -109,8 +109,8 @@ public class PageMenu<E> extends AbstractMenu {
         updateSlots();
     }
 
-    public void previosPage() {
-        if(!hasPreviosPage()) {
+    public void previousPage() {
+        if(!hasPreviousPage()) {
             throw new RuntimeException("Previos page not found");
         }
 
