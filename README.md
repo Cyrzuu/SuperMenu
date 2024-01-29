@@ -74,8 +74,6 @@ public class Class {
 ```
 
 ```java
-import org.bukkit.Bukkit;
-
 public class Class {
     public void eventGame() {
         FastMenu fastMenu = new FastMenu(6, "First come first served");
@@ -94,13 +92,15 @@ public class Class {
 
         fastMenu.setItem(randomSlot, new ItemStack(Material.DIAMOND));
 
-        fastMenu.onClose(((player, inventory) -> {
-            if (inventory.getViewers().size() <= 1) {
+        fastMenu.onClose(((player, menu) -> {
+            if (menu.getInventory().getViewers().size() <= 1) {
                 fastMenu.unregister();
             }
+
+            return true;
         }));
 
-        fastMenu.setUnregisterOnClose(false);
+        fastMenu.unregisterOnClose(false);
         Bukkit.getOnlinePlayers().forEach(fastMenu::open);
     }
 }
