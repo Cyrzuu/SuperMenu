@@ -53,7 +53,7 @@ public class Class {
         FastMenu fastMenu = new FastMenu(1, "Set gamemode");
 
         fastMenu.setButton(3,
-                new ItemButton(displayName(new ItemStack(Material.IRON_SWORD), "Survival"),
+                new ItemButton(new ItemStack(Material.IRON_SWORD),
                         (player, state) -> {
                             if(player.hasPermission("gamemode.survival")) player.setGameMode(GameMode.SURVIVAL);
                             else player.sendMessage("No permission!");
@@ -61,7 +61,7 @@ public class Class {
                 ));
 
         fastMenu.setButton(5,
-                new ItemButton(displayName(new ItemStack(Material.GRASS), "Creative"),
+                new ItemButton(new ItemStack(Material.GRASS),
                         (player, state) -> {
                             if(player.hasPermission("gamemode.creative")) player.setGameMode(GameMode.CREATIVE);
                             else player.sendMessage("No permission!");
