@@ -107,9 +107,6 @@ public class Class {
 ```
 
 ```java
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
 public class Class {
     public void pageMenu(Player target) {
         PageMenu<Material> pageMenu = new PageMenu<>(3, List.of(Material.STONE, Material.COBBLESTONE, Material.DIRT, Material.GRASS_BLOCK, Material.NETHERRACK, Material.NETHER_BRICKS,
