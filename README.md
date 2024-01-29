@@ -111,34 +111,34 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class Class {
-    public void pageMenu() {
+    public void pageMenu(Player target) {
         PageMenu<Material> pageMenu = new PageMenu<>(3, List.of(Material.STONE, Material.COBBLESTONE, Material.DIRT, Material.GRASS_BLOCK, Material.NETHERRACK, Material.NETHER_BRICKS,
                 Material.OAK_LOG, Material.OAK_LEAVES, Material.APPLE, Material.GOLDEN_APPLE),
                 (s, i) -> new StackBuilder(s).setName(s.name().toLowerCase().replace("_", " ")).build());
 
         pageMenu.setSlots(12, 14);
 
-        pageMenu.setButton(0, new ItemButton(new StackBuilder(Material.ARROW).setName("Previous page").build(), (p, ib) -> {
+        pageMenu.setButton(0, new ItemButton(new StackBuilder(Material.ARROW).setName("Previous page").build(), (player, ib) -> {
             if (pageMenu.hasPreviousPage()) {
-                send(player, Color.Sound.CLICK, 0.75);
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.75f, 1f);
                 pageMenu.previousPage();
             }
         }));
 
-        pageMenu.setButton(1, new ItemButton(new StackBuilder(Material.ARROW).setName("Next page").build(), (p, ib) -> {
+        pageMenu.setButton(1, new ItemButton(new StackBuilder(Material.ARROW).setName("Next page").build(), (player, ib) -> {
             if (pageMenu.hasNextPage()) {
-                send(player, Color.Sound.CLICK, 1.25);
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.25f, 1f);
                 pageMenu.nextPage();
             }
         }));
 
-        pageMenu.onClose((p, m) -> p.getGameMode() == GameMode.CREATIVE);
+        pageMenu.onClose((player, m) -> player.getGameMode() == GameMode.CREATIVE);
 
-        pageMenu.setOnClickObject((m, p) -> p.getInventory().addItem(new ItemStack(m)));
+        pageMenu.setOnClickObject((m, player) -> player.getInventory().addItem(new ItemStack(m)));
 
         pageMenu.fillBorder(new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
 
-        pageMenu.open(player);
+        pageMenu.open(target);
     }
 }
 ```
