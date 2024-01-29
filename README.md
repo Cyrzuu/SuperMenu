@@ -107,6 +107,9 @@ public class Class {
 ```
 
 ```java
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 public class Class {
     public void pageMenu() {
         PageMenu<Material> pageMenu = new PageMenu<>(3, List.of(Material.STONE, Material.COBBLESTONE, Material.DIRT, Material.GRASS_BLOCK, Material.NETHERRACK, Material.NETHER_BRICKS,
@@ -116,14 +119,14 @@ public class Class {
         pageMenu.setSlots(12, 14);
 
         pageMenu.setButton(0, new ItemButton(new StackBuilder(Material.ARROW).setName("Previous page").build(), (p, ib) -> {
-            if(pageMenu.hasPreviousPage()) {
+            if (pageMenu.hasPreviousPage()) {
                 send(player, Color.Sound.CLICK, 0.75);
                 pageMenu.previousPage();
             }
         }));
 
         pageMenu.setButton(1, new ItemButton(new StackBuilder(Material.ARROW).setName("Next page").build(), (p, ib) -> {
-            if(pageMenu.hasNextPage()) {
+            if (pageMenu.hasNextPage()) {
                 send(player, Color.Sound.CLICK, 1.25);
                 pageMenu.nextPage();
             }
@@ -132,6 +135,8 @@ public class Class {
         pageMenu.onClose((p, m) -> p.getGameMode() == GameMode.CREATIVE);
 
         pageMenu.setOnClickObject((m, p) -> p.getInventory().addItem(new ItemStack(m)));
+
+        pageMenu.fillBorder(new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
 
         pageMenu.open(player);
     }
