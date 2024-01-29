@@ -1,5 +1,7 @@
 package me.cyrzu.supermenu;
 
+import me.cyrzu.supermenu.inventory.AbstractMenu;
+import me.cyrzu.supermenu.inventory.AbstractMoveableMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,8 +11,6 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import supermenu.inventory.AbstractMenu;
-import supermenu.inventory.AbstractMoveableMenu;
 
 import java.util.Objects;
 

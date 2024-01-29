@@ -1,6 +1,10 @@
 package me.cyrzu.supermenu.inventory;
 
 import lombok.Getter;
+import me.cyrzu.supermenu.CooldownManager;
+import me.cyrzu.supermenu.MenuManager;
+import me.cyrzu.supermenu.MenuTask;
+import me.cyrzu.supermenu.button.ButtonHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -8,10 +12,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supermenu.CooldownManager;
-import supermenu.MenuManager;
-import supermenu.MenuTask;
-import supermenu.button.ButtonHandler;
 
 import java.util.Arrays;
 import java.util.HashMap;

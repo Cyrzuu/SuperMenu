@@ -1,13 +1,13 @@
 package me.cyrzu.supermenu.inventory;
 
 import lombok.Getter;
+import me.cyrzu.supermenu.Range;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supermenu.Range;
 
 import java.util.*;
 import java.util.function.BiConsumer;

@@ -1,11 +1,11 @@
 package me.cyrzu.supermenu.button;
 
+import me.cyrzu.supermenu.ItemButtonState;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import supermenu.ItemButtonState;
 
 import java.util.function.BiConsumer;
 
