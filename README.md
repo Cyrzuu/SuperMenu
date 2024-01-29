@@ -74,8 +74,6 @@ public class Class {
 ```
 
 ```java
-import org.bukkit.Bukkit;
-
 public class Class {
     public void eventGame() {
         FastMenu fastMenu = new FastMenu(6, "First come first served");
@@ -94,13 +92,15 @@ public class Class {
 
         fastMenu.setItem(randomSlot, new ItemStack(Material.DIAMOND));
 
-        fastMenu.onClose(((player, inventory) -> {
-            if (inventory.getViewers().size() <= 1) {
+        fastMenu.onClose(((player, menu) -> {
+            if (menu.getInventory().getViewers().size() <= 1) {
                 fastMenu.unregister();
             }
+
+            return true;
         }));
 
-        fastMenu.setUnregisterOnClose(false);
+        fastMenu.unregisterOnClose(false);
         Bukkit.getOnlinePlayers().forEach(fastMenu::open);
     }
 }
@@ -108,10 +108,11 @@ public class Class {
 
 ```java
 public class Class {
-    public void eventGame() {
+    public void pageMenu() {
         PageMenu<Material> pageMenu = new PageMenu<>(3, List.of(Material.STONE, Material.COBBLESTONE, Material.DIRT, Material.GRASS_BLOCK, Material.NETHERRACK, Material.NETHER_BRICKS,
                 Material.OAK_LOG, Material.OAK_LEAVES, Material.APPLE, Material.GOLDEN_APPLE),
                 (s, i) -> new StackBuilder(s).setName(s.name().toLowerCase().replace("_", " ")).build());
+
         pageMenu.setSlots(12, 14);
 
         pageMenu.setButton(0, new ItemButton(new StackBuilder(Material.ARROW).setName("Previous page").build(), (p, ib) -> {
