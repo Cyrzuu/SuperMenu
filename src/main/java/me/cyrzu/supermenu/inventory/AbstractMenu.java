@@ -13,15 +13,15 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 public abstract class AbstractMenu {
+
+    @NotNull
+    public static Random random = new Random();
 
     @Getter
     protected boolean unregistered = false;
@@ -191,6 +191,10 @@ public abstract class AbstractMenu {
             if (i <= 8 || (i >= rows * 9 - 8 && i <= rows * 9 - 2) || i % 9 == 0 || i % 9 == 8)
                 inventory.setItem(i, stack);
         }
+    }
+
+    public int randomSlot() {
+        return random.nextInt(inventory.getSize());
     }
 
 }
