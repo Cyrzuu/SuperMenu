@@ -112,6 +112,7 @@ public class Class {
         PageMenu<Material> pageMenu = new PageMenu<>(3, List.of(Material.STONE, Material.COBBLESTONE, Material.DIRT, Material.GRASS_BLOCK, Material.NETHERRACK, Material.NETHER_BRICKS,
                 Material.OAK_LOG, Material.OAK_LEAVES, Material.APPLE, Material.GOLDEN_APPLE),
                 (s, i) -> new StackBuilder(s).setName(s.name().toLowerCase().replace("_", " ")).build());
+
         pageMenu.setSlots(12, 14);
 
         pageMenu.setButton(0, new ItemButton(new StackBuilder(Material.ARROW).setName("Previous page").build(), (p, ib) -> {
