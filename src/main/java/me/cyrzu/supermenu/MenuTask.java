@@ -17,10 +17,10 @@ public class MenuTask {
     private @Nullable BukkitTask task;
 
     public MenuTask(JavaPlugin instance, @NotNull Runnable runnable) {
-        this(instance, 20, runnable);
+        this(instance, runnable, 20);
     }
 
-    public MenuTask(JavaPlugin instance, long period, @NotNull Runnable runnable) {
+    public MenuTask(JavaPlugin instance, @NotNull Runnable runnable, long period) {
         this.instance = instance;
         this.period = Math.max(1, period);
         this.runnable = runnable;

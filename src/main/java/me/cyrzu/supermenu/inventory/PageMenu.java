@@ -1,41 +1,38 @@
 package me.cyrzu.supermenu.inventory;
 
 import lombok.Getter;
-import me.cyrzu.supermenu.Range;
-import me.cyrzu.supermenu.button.ButtonHandler;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supermenu.Range;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class PageMenu<E> extends MenuHandler {
+public class PageMenu<E> extends AbstractMenu {
 
     @Getter
-    private int page;
+    private int pages;
 
     @Getter
     private int currentPage = 1;
 
     @NotNull
-    private final ArrayList<E> objects = new ArrayList<>();
+    private final Slots slots;
 
     @NotNull
-    private Set<@NotNull Integer> slots;
+    private final ArrayList<E> objects;
 
     @NotNull
-    public final BiFunction<E, @NotNull Integer, @NotNull ItemStack> biFunction;
+    public final BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> biFunction;
 
     @Nullable
-    public Consumer<E> objectClick;
+    public BiConsumer<@NotNull E, @NotNull Player> objectClick;
 
     public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull BiFunction<E, @NotNull Integer, @NotNull ItemStack> function) {
         this(rows, objects, "", function);
@@ -45,56 +42,53 @@ public class PageMenu<E> extends MenuHandler {
         super(rows, title);
 
         this.biFunction = function;
-        this.slots = IntStream.rangeClosed(0, 53).boxed().collect(Collectors.toSet());
-        this.page = Math.max(1, page);
-        this.objects.addAll(objects);
+        this.slots = new Slots(getInventory());
+        this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
+        this.objects = new ArrayList<>(objects);
     }
 
-    public PageMenu<E> setSlots(@NotNull Range... ranges) {
-        if(ranges == null || ranges.length == 0) {
-            return this;
+    @Override
+    protected void onClick(@NotNull Player player, int slot) {
+        if(objectClick == null) {
+            return;
         }
 
-        Set<@NotNull Integer> newSlots = new HashSet<>();
-        for (Range range : ranges) {
-            newSlots.addAll(range.get());
+        int i1 = slots.indexOf(slot);
+        if(i1 >= 0) {
+            E e = objects.get(((currentPage - 1) * slots.size()) + i1);
+            objectClick.accept(e, player);
         }
-
-        if(!newSlots.isEmpty())
-            this.slots = newSlots;
-
-        return this;
     }
 
-    public PageMenu<E> setSlots(@NotNull Integer... slots) {
-        if(slots == null || slots.length == 0) {
-            return this;
-        }
-
-        int size = inventory.getSize();
-        Set<@NotNull Integer> newSlots = Arrays.stream(slots)
-                .filter(slot -> slot >= 0 && slot < size)
-                .collect(Collectors.toSet());
-
-        if(!newSlots.isEmpty())
-            this.slots = newSlots;
-
-        return this;
+    @Override
+    protected void onStart() {
+        updateSlots();
     }
 
-    public PageMenu<E> setObjects(@NotNull Collection<E> collection) {
-        objects.clear();
-        objects.addAll(collection);
-        return this;
-    }
-
-    public PageMenu<E> setOnClickObject(@NotNull Consumer<E> consumer) {
+    public final void setOnClickObject(@NotNull BiConsumer<E, Player> consumer) {
         this.objectClick = consumer;
-        return this;
+    }
+
+    public void setSlots(@NotNull Collection<@NotNull Integer> slots) {
+        if(started) return;
+        this.slots.setSlots(slots);
+        this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
+    }
+
+    public void setSlots(@NotNull Range... ranges) {
+        if(started) return;
+        slots.setSlots(ranges);
+        this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
+    }
+
+    public void setSlots(@NotNull Integer... integers) {
+        if(started) return;
+        slots.setSlots(integers);
+        this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
     }
 
     public boolean hasNextPage() {
-        return currentPage < page;
+        return currentPage < pages;
     }
 
     public boolean hasPreviosPage() {
@@ -107,12 +101,12 @@ public class PageMenu<E> extends MenuHandler {
         }
 
         currentPage++;
-        updatePage();
+        updateSlots();
     }
 
     public void lastPage() {
-        this.currentPage = page;
-        updatePage();
+        this.currentPage = pages;
+        updateSlots();
     }
 
     public void previosPage() {
@@ -121,101 +115,93 @@ public class PageMenu<E> extends MenuHandler {
         }
 
         currentPage--;
-        updatePage();
+        updateSlots();
     }
 
     public void firstPage() {
         this.currentPage = 1;
-        updatePage();
+        updateSlots();
     }
 
     public void setPage(int page) {
-        this.currentPage = Math.max(1, Math.min(this.page, page));
-        updatePage();
+        this.currentPage = Math.max(1, Math.min(this.pages, page));
+        updateSlots();
     }
 
+    private void updateSlots() {
+        ItemStack airStack = new ItemStack(Material.AIR);
+        slots.getSlots().forEach(slot -> setItem(slot, airStack));
 
-    private void updatePage() {
+        Integer[] slots = this.slots.getSlots().toArray(Integer[]::new);
+        int[] objectsIndex = getObjectsIndex();
+        int index = 0;
 
-    }
-
-    @Override
-    protected void onClick(int slot) {
-        int i = List.copyOf(slots).indexOf(slot);
-        int index = i * currentPage;
-
-        if(objectClick != null && i >= 0 && index < objects.size()) {
-            objectClick.accept(objects.get(index));
+        for (int i : objectsIndex) {
+            E object = objects.get(i);
+            ItemStack stack = biFunction.apply(object, i);
+            setItem(slots[index++], stack);
         }
     }
 
-    public PageMenu<E> onClose(@NotNull BiConsumer<@NotNull Player, @NotNull Inventory> action) {
-        super.onClose(action);
-        return this;
+    private int[] getObjectsIndex() {
+        int start = (currentPage - 1) * slots.size();
+        int end = Math.min(currentPage * slots.size(), objects.size());
+        return IntStream.range(start, end).toArray();
     }
 
-    @Override
-    public PageMenu<E> setButton(int slot, ButtonHandler button) {
-        super.setButton(slot, button);
-        return this;
-    }
+    private static class Slots {
 
-    @Override
-    public PageMenu<E> setTask(long period, @NotNull Runnable runnable) {
-        super.setTask(period, runnable);
-        return this;
-    }
+        @NotNull
+        private ArrayList<Integer> slots = new ArrayList<>(List.of(0));
 
-    @Override
-    public PageMenu<E> setTask(@NotNull Runnable runnable) {
-        super.setTask(runnable);
-        return this;
-    }
+        @Getter
+        @NotNull
+        private Integer[] arraySlots = new Integer[]{0};
 
+        public Slots(@NotNull Inventory inventory) {
+            setSlots(IntStream.range(0, inventory.getSize())
+                    .boxed()
+                    .toList());
+        }
 
-    public PageMenu<E> setPermission(@NotNull String permission) {
-        super.setPermission(new Permission(permission));
-        return this;
-    }
+        public void setSlots(@NotNull Collection<@NotNull Integer> slots) {
+            this.slots = new ArrayList<>(slots);
+            this.arraySlots = slots.toArray(Integer[]::new);
+        }
 
-    @Override
-    public PageMenu<E> setUnregisterOnClose(boolean unregister) {
-        super.setUnregisterOnClose(unregister);
-        return this;
-    }
+        public void setSlots(@NotNull Range... ranges) {
+            if(ranges == null || ranges.length == 0) {
+                return;
+            }
 
-    @Override
-    public PageMenu<E> fillAll(@NotNull ItemStack stack) {
-        return fillAll(stack, new Integer[0]);
-    }
+            setSlots(Arrays.stream(ranges)
+                    .flatMap(range -> range.get().stream())
+                    .distinct()
+                    .toList());
+        }
 
-    @Override
-    public PageMenu<E> fillAll(@NotNull ItemStack stack, @NotNull Integer... ignore) {
-        super.fillAll(stack, ignore);
-        return this;
-    }
+        public void setSlots(@NotNull Integer... integers) {
+            if(integers == null || integers.length == 0) {
+                return;
+            }
 
-    @Override
-    public PageMenu<E> setMoveableSlot(int slot) {
-        return setMoveableSlot(slot, null, null);
-    }
+            setSlots(Arrays.stream(integers)
+                    .distinct()
+                    .toList());
+        }
 
-    @Override
-    public PageMenu<E> setMoveableSlot(int slot, @Nullable BiFunction<Player, ItemStack, Boolean> put) {
-        return setMoveableSlot(slot, put, null);
-    }
+        public int indexOf(int slot) {
+            return slots.indexOf(slot);
+        }
 
-    @Override
-    public PageMenu<E> setMoveableSlot(int slot, @Nullable BiFunction<Player, ItemStack, Boolean> put,
-                                    @Nullable BiFunction<Player, ItemStack, Boolean> take) {
-        super.setMoveableSlot(slot, put, take);
-        return this;
-    }
+        public int size() {
+            return slots.size();
+        }
 
-    @Override
-    public PageMenu<E> setItem(int slot, @NotNull ItemStack stack) {
-        super.setItem(slot, stack);
-        return this;
+        public Collection<Integer> getSlots() {
+            return Collections.unmodifiableCollection(slots);
+        }
+
     }
 
 }

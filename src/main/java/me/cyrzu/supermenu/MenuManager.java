@@ -1,16 +1,19 @@
 package me.cyrzu.supermenu;
 
-import me.cyrzu.supermenu.inventory.MenuHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import supermenu.inventory.AbstractMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class MenuManager {
 
@@ -32,7 +35,7 @@ public class MenuManager {
         return manager;
     }
 
-    public static void registerMenu(@NotNull MenuHandler menuHandler) {
+    public static void registerMenu(@NotNull AbstractMenu menuHandler) {
         if(manager == null) {
             throw new RuntimeException("MenuManager is not registered");
         }
@@ -42,7 +45,8 @@ public class MenuManager {
 
     private final JavaPlugin instance;
 
-    private final Map<Inventory, MenuHandler> inventories;
+    @NotNull
+    private final Map<Inventory, AbstractMenu> inventories;
 
     private MenuManager(JavaPlugin instance) {
         this.instance = instance;
@@ -51,18 +55,36 @@ public class MenuManager {
         Bukkit.getPluginManager().registerEvents(new MenuListeners(this), instance);
     }
 
-    private void register(@NotNull MenuHandler handler) {
+    private void register(@NotNull AbstractMenu handler) {
         inventories.put(handler.getInventory(), handler);
     }
 
-    public void unregister(@NotNull MenuHandler handler) {
+    public boolean unregisterIf(@NotNull Predicate<AbstractMenu> filter) {
+        boolean removed = false;
+        for (Map.Entry<Inventory, AbstractMenu> entry : inventories.entrySet()) {
+            if(filter.test(entry.getValue())) {
+                inventories.remove(entry.getKey());
+                removed = true;
+            }
+        }
+
+        return removed;
+    }
+
+    public void unregisterAll() {
+        inventories.values().forEach(this::unregister);
+    }
+
+    public void unregister(@NotNull AbstractMenu handler) {
+        handler.removeButtons();
+        handler.fillAll(new ItemStack(Material.AIR));
         inventories.remove(handler.getInventory());
 
         handler.cancelTask();
         new ArrayList<>(handler.getInventory().getViewers()).forEach(HumanEntity::closeInventory);
     }
 
-    public @Nullable MenuHandler getMenuHandler(Inventory inventory) {
+    public @Nullable AbstractMenu getMenuHandler(Inventory inventory) {
         return inventories.get(inventory);
     }
 

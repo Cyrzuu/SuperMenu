@@ -9,7 +9,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemButtonState {
 
-    private final @NotNull Inventory inventory;
+    @NotNull
+    private final Inventory inventory;
 
     private final int slot;
 
@@ -17,7 +18,8 @@ public class ItemButtonState {
     private final ClickType type;
 
     @Getter
-    private final @NotNull ItemStack stack;
+    @NotNull
+    private ItemStack stack;
 
     public ItemButtonState(@NotNull Inventory inventory, int slot, ClickType type, @NotNull ItemStack stack) {
         this.inventory = inventory;
@@ -29,6 +31,7 @@ public class ItemButtonState {
     public void setStack(@Nullable ItemStack stack) {
         if(stack == null) return;
         inventory.setItem(slot, stack);
+        this.stack = stack;
     }
 
 }
