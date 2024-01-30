@@ -115,25 +115,16 @@ public class Class {
 
         pageMenu.setSlots(12, 14);
 
-        pageMenu.setButton(0, new ItemButton(new StackBuilder(Material.ARROW).setName("Previous page").build(), (player, ib) -> {
-            if (pageMenu.hasPreviousPage()) {
-                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.75f, 1f);
-                pageMenu.previousPage();
-            }
-        }));
-
-        pageMenu.setButton(1, new ItemButton(new StackBuilder(Material.ARROW).setName("Next page").build(), (player, ib) -> {
-            if (pageMenu.hasNextPage()) {
-                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.25f, 1f);
-                pageMenu.nextPage();
-            }
-        }));
+        pageMenu.setNextPageButton(3, new ItemStack(Material.ARROW), page -> target.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.75f, 1f));
+        
+        pageMenu.setNextPageButton(5, new ItemStack(Material.ARROW), page -> target.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.25f, 1f));
 
         pageMenu.onClose((player, menu) -> player.getGameMode() == GameMode.CREATIVE);
 
         pageMenu.onClickObject((player, object) -> player.getInventory().addItem(new ItemStack(object));
 
         pageMenu.fillBorder(new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
+
 
         pageMenu.open(target);
     }

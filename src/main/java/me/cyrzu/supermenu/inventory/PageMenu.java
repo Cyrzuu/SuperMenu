@@ -103,8 +103,21 @@ public class PageMenu<E> extends AbstractMenu {
     }
 
     public void setNextPageButton(int slot, @NotNull ItemStack stack, @Nullable Consumer<Integer> onClick) {
-        slot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
+        nextPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
+        inventory.setItem(nextPageSlot, stack);
 
+        this.next = onClick;
+    }
+
+    public void setPreviousPageButton(int slot, @NotNull ItemStack stack) {
+        setPreviousPageButton(slot, stack, null);
+    }
+
+    public void setPreviousPageButton(int slot, @NotNull ItemStack stack, @Nullable Consumer<Integer> onClick) {
+        previousPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
+        inventory.setItem(previousPageSlot, stack);
+
+        this.previous = onClick;
     }
 
     public void setSlots(@NotNull Collection<@NotNull Integer> slots) {
