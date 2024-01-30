@@ -2,7 +2,7 @@ Wow coooooo 😮😎
 
 [![](https://jitpack.io/v/Cyrzuu/SuperMenu.svg)](https://jitpack.io/#Cyrzuu/SuperMenu)
 
-**Maven:** 
+**Maven:**
 ```xml
 <repository>
     <id>jitpack.io</id>
@@ -10,9 +10,9 @@ Wow coooooo 😮😎
 </repository>
 
 <dependency>
-    <groupId>com.github.Cyrzuu</groupId>
-    <artifactId>SuperMenu</artifactId>
-    <version>2.1.2</version>
+<groupId>com.github.Cyrzuu</groupId>
+<artifactId>SuperMenu</artifactId>
+<version>2.2.0</version>
 </dependency>
 ```
 
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-        implementation 'com.github.Cyrzuu:SuperMenu:2.1.2'
+        implementation 'com.github.Cyrzuu:SuperMenu:2.2.0'
 }
 ```
 
@@ -46,7 +46,7 @@ public class Plugin extends JavaPlugin {
 } 
 ```
 
-Example 
+Example
 ```java
 public class Class {
     public void setGameMode(Player target) {
@@ -129,9 +129,9 @@ public class Class {
             }
         }));
 
-        pageMenu.onClose((player, m) -> player.getGameMode() == GameMode.CREATIVE);
+        pageMenu.onClose((player, menu) -> player.getGameMode() == GameMode.CREATIVE);
 
-        pageMenu.setOnClickObject((m, player) -> player.getInventory().addItem(new ItemStack(m)));
+        pageMenu.onClickObject((player, object) -> player.getInventory().addItem(new ItemStack(object));
 
         pageMenu.fillBorder(new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
 

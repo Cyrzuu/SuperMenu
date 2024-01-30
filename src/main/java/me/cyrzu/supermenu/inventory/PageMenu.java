@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 public class PageMenu<E> extends AbstractMenu {
@@ -32,7 +33,17 @@ public class PageMenu<E> extends AbstractMenu {
     public final BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> biFunction;
 
     @Nullable
-    public BiConsumer<@NotNull E, @NotNull Player> objectClick;
+    public BiConsumer<@NotNull Player, @NotNull E> objectClick;
+
+    private int nextPageSlot = -1;
+
+    @Nullable
+    public Consumer<@NotNull Integer> next;
+
+    private int previousPageSlot = -1;
+
+    @Nullable
+    public Consumer<@NotNull Integer> previous;
 
     public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull BiFunction<E, @NotNull Integer, @NotNull ItemStack> function) {
         this(rows, objects, "", function);
@@ -49,6 +60,24 @@ public class PageMenu<E> extends AbstractMenu {
 
     @Override
     protected void onClick(@NotNull Player player, int slot) {
+        if(nextPageSlot != -1 && slot == nextPageSlot) {
+            if(!hasNextPage()) {
+                return;
+            }
+
+            nextPage();
+            return;
+        }
+
+        if(previousPageSlot != -1 && slot == previousPageSlot) {
+            if(!hasPreviousPage()) {
+                return;
+            }
+
+            previousPage();
+            return;
+        }
+
         if(objectClick == null) {
             return;
         }
@@ -56,7 +85,7 @@ public class PageMenu<E> extends AbstractMenu {
         int i1 = slots.indexOf(slot);
         if(i1 >= 0) {
             E e = objects.get(((currentPage - 1) * slots.size()) + i1);
-            objectClick.accept(e, player);
+            objectClick.accept(player, e);
         }
     }
 
@@ -65,8 +94,17 @@ public class PageMenu<E> extends AbstractMenu {
         updateSlots();
     }
 
-    public final void setOnClickObject(@NotNull BiConsumer<E, Player> consumer) {
+    public final void onClickObject(@NotNull BiConsumer<Player, E> consumer) {
         this.objectClick = consumer;
+    }
+
+    public void setNextPageButton(int slot, @NotNull ItemStack stack) {
+        setNextPageButton(slot, stack, null);
+    }
+
+    public void setNextPageButton(int slot, @NotNull ItemStack stack, @Nullable Consumer<Integer> onClick) {
+        slot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
+
     }
 
     public void setSlots(@NotNull Collection<@NotNull Integer> slots) {
@@ -102,6 +140,10 @@ public class PageMenu<E> extends AbstractMenu {
 
         currentPage++;
         updateSlots();
+
+        if(next != null) {
+            next.accept(currentPage);
+        }
     }
 
     public void lastPage() {
@@ -116,6 +158,10 @@ public class PageMenu<E> extends AbstractMenu {
 
         currentPage--;
         updateSlots();
+
+        if(previous != null) {
+            previous.accept(currentPage);
+        }
     }
 
     public void firstPage() {
