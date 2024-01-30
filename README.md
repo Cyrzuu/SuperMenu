@@ -117,7 +117,7 @@ public class Class {
 
         pageMenu.setNextPageButton(3, new ItemStack(Material.ARROW), page -> target.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.75f, 1f));
         
-        pageMenu.setNextPageButton(5, new ItemStack(Material.ARROW), page -> target.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.25f, 1f));
+        pageMenu.setPreviousPageButton(5, new ItemStack(Material.ARROW), page -> target.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.25f, 1f));
 
         pageMenu.onClose((player, menu) -> player.getGameMode() == GameMode.CREATIVE);
 
