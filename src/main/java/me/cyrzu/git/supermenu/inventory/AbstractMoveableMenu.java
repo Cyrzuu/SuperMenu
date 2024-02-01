@@ -1,6 +1,6 @@
-package me.cyrzu.supermenu.inventory;
+package me.cyrzu.git.supermenu.inventory;
 
-import me.cyrzu.supermenu.MenuMoveableSlot;
+import me.cyrzu.git.supermenu.MenuMoveableSlot;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package me.cyrzu.supermenu.inventory;
+package me.cyrzu.git.supermenu.inventory;
 
 public class FastMenu extends AbstractMoveableMenu {
 

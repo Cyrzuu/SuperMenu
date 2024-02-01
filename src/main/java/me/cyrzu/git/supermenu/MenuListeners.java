@@ -1,7 +1,7 @@
-package me.cyrzu.supermenu;
+package me.cyrzu.git.supermenu;
 
-import me.cyrzu.supermenu.inventory.AbstractMenu;
-import me.cyrzu.supermenu.inventory.AbstractMoveableMenu;
+import me.cyrzu.git.supermenu.inventory.AbstractMenu;
+import me.cyrzu.git.supermenu.inventory.AbstractMoveableMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

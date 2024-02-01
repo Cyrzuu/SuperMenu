@@ -1,6 +1,6 @@
-package me.cyrzu.supermenu.button;
+package me.cyrzu.git.supermenu.button;
 
-import me.cyrzu.supermenu.ItemButtonState;
+import me.cyrzu.git.supermenu.ItemButtonState;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

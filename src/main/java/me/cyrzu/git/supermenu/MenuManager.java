@@ -1,6 +1,6 @@
-package me.cyrzu.supermenu;
+package me.cyrzu.git.supermenu;
 
-import me.cyrzu.supermenu.inventory.AbstractMenu;
+import me.cyrzu.git.supermenu.inventory.AbstractMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;

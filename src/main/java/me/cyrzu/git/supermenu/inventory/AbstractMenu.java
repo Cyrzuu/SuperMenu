@@ -1,10 +1,10 @@
-package me.cyrzu.supermenu.inventory;
+package me.cyrzu.git.supermenu.inventory;
 
 import lombok.Getter;
-import me.cyrzu.supermenu.CooldownManager;
-import me.cyrzu.supermenu.MenuManager;
-import me.cyrzu.supermenu.MenuTask;
-import me.cyrzu.supermenu.button.ButtonHandler;
+import me.cyrzu.git.supermenu.CooldownManager;
+import me.cyrzu.git.supermenu.button.ButtonHandler;
+import me.cyrzu.git.supermenu.MenuManager;
+import me.cyrzu.git.supermenu.MenuTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

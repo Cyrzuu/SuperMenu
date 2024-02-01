@@ -1,7 +1,7 @@
-package me.cyrzu.supermenu.inventory;
+package me.cyrzu.git.supermenu.inventory;
 
 import lombok.Getter;
-import me.cyrzu.supermenu.Range;
+import me.cyrzu.git.supermenu.Range;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

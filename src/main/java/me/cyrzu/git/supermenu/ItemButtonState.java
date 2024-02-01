@@ -1,4 +1,4 @@
-package me.cyrzu.supermenu;
+package me.cyrzu.git.supermenu;
 
 import lombok.Getter;
 import org.bukkit.event.inventory.ClickType;

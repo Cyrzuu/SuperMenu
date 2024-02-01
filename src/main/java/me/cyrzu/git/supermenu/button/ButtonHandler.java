@@ -1,4 +1,4 @@
-package me.cyrzu.supermenu.button;
+package me.cyrzu.git.supermenu.button;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
