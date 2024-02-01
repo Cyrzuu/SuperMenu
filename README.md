@@ -111,11 +111,11 @@ public class Class {
     public void pageMenu(Player target) {
         PageMenu<Material> pageMenu = new PageMenu<>(3, List.of(Material.STONE, Material.COBBLESTONE, Material.DIRT, Material.GRASS_BLOCK, Material.NETHERRACK, Material.NETHER_BRICKS,
                 Material.OAK_LOG, Material.OAK_LEAVES, Material.APPLE, Material.GOLDEN_APPLE),
-                (s, i) -> new StackBuilder(s).setName(s.name().toLowerCase().replace("_", " ")).build());
+                (material, i) -> new ItemStack(material));
 
         pageMenu.setSlots(12, 14);
 
-        pageMenu.setNextPageButton(3, new ItemStack(Material.ARROW), page -> target.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.75f, 1f));
+        pageMenu.setPreviousPageButton(3, new ItemStack(Material.ARROW), page -> target.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.75f, 1f));
         
         pageMenu.setNextPageButton(5, new ItemStack(Material.ARROW), page -> target.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.25f, 1f));
 
