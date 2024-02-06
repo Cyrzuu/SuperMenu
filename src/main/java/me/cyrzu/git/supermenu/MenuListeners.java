@@ -16,16 +16,16 @@ import java.util.Objects;
 
 public class MenuListeners implements Listener {
 
-    private final MenuManager menuManager;
+    private final SuperMenu superMenu;
 
-    public MenuListeners(MenuManager menuManager) {
-        this.menuManager = menuManager;
+    public MenuListeners(SuperMenu superMenu) {
+        this.superMenu = superMenu;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        AbstractMenu inventory = menuManager.getMenuHandler(event.getInventory());
+        AbstractMenu inventory = superMenu.getMenuHandler(event.getInventory());
         Inventory clickedInventory = event.getClickedInventory();
 
         if(inventory instanceof AbstractMoveableMenu moveableMenu && moveableMenu.hasMoveableSlots()) {
@@ -74,7 +74,7 @@ public class MenuListeners implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent event) {
         Player player = (Player) event.getWhoClicked();
-        AbstractMenu menuHandler = menuManager.getMenuHandler(event.getInventory());
+        AbstractMenu menuHandler = superMenu.getMenuHandler(event.getInventory());
         int size = event.getInventory().getSize() - 1;
 
         if(menuHandler instanceof AbstractMoveableMenu moveableMenu) {
@@ -94,28 +94,28 @@ public class MenuListeners implements Listener {
     @EventHandler
     private void onInventoryClose(InventoryCloseEvent e) {
         Player player = (Player) e.getPlayer();
-        AbstractMenu menuHandler = menuManager.getMenuHandler(e.getInventory());
+        AbstractMenu menuHandler = superMenu.getMenuHandler(e.getInventory());
 
         if(menuHandler != null) {
             var close = menuHandler.getClose();
             if(close != null && !close.test(player, menuHandler)) {
-                Bukkit.getScheduler().runTask(menuManager.getInstance(), () -> menuHandler.open(player));
+                Bukkit.getScheduler().runTask(superMenu.getInstance(), () -> menuHandler.open(player));
                 return;
             }
 
             if(menuHandler.isUnregisterOnClose()) {
-                menuManager.unregister(menuHandler);
+                superMenu.unregister(menuHandler);
             }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPluginDisable(PluginDisableEvent event) {
-        if(!Objects.equals(event.getPlugin(), menuManager.getInstance())) {
+        if(!Objects.equals(event.getPlugin(), superMenu.getInstance())) {
             return;
         }
 
-        menuManager.unregisterAll();
+        superMenu.unregisterAll();
     }
 
 }

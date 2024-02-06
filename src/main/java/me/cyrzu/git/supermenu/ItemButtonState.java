@@ -1,6 +1,7 @@
 package me.cyrzu.git.supermenu;
 
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,10 @@ public class ItemButtonState {
     @NotNull
     private final Inventory inventory;
 
+    @Getter
+    @NotNull
+    private final Player WhoClicked;
+
     private final int slot;
 
     @Getter
@@ -21,8 +26,9 @@ public class ItemButtonState {
     @NotNull
     private ItemStack stack;
 
-    public ItemButtonState(@NotNull Inventory inventory, int slot, ClickType type, @NotNull ItemStack stack) {
+    public ItemButtonState(@NotNull Inventory inventory, @NotNull Player WhoClicked, int slot, ClickType type, @NotNull ItemStack stack) {
         this.inventory = inventory;
+        this.WhoClicked = WhoClicked;
         this.type = type;
         this.stack = stack;
         this.slot = slot;

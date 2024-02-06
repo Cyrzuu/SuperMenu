@@ -16,19 +16,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class MenuManager {
+public class SuperMenu {
 
-    private @Nullable static MenuManager manager = null;
+    private @Nullable static SuperMenu manager = null;
 
     public static void registerManager(JavaPlugin instance) {
         if(manager != null) {
             throw new RuntimeException("Manager is registered");
         }
 
-        manager = new MenuManager(instance);
+        manager = new SuperMenu(instance);
     }
 
-    public static @NotNull MenuManager getManager() {
+    public static @NotNull SuperMenu getManager() {
         if(manager == null) {
             throw new RuntimeException("Manager is not registered");
         }
@@ -38,7 +38,7 @@ public class MenuManager {
 
     public static void registerMenu(@NotNull AbstractMenu menuHandler) {
         if(manager == null) {
-            throw new RuntimeException("MenuManager is not registered");
+            throw new RuntimeException("SuperMenu is not registered");
         }
 
         manager.register(menuHandler);
@@ -49,7 +49,7 @@ public class MenuManager {
     @NotNull
     private final Map<Inventory, AbstractMenu> inventories;
 
-    private MenuManager(JavaPlugin instance) {
+    private SuperMenu(JavaPlugin instance) {
         this.instance = instance;
         this.inventories = new HashMap<>();
 

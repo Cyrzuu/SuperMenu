@@ -2,9 +2,9 @@ package me.cyrzu.git.supermenu.inventory;
 
 import lombok.Getter;
 import me.cyrzu.git.supermenu.CooldownManager;
-import me.cyrzu.git.supermenu.button.ButtonHandler;
-import me.cyrzu.git.supermenu.MenuManager;
 import me.cyrzu.git.supermenu.MenuTask;
+import me.cyrzu.git.supermenu.SuperMenu;
+import me.cyrzu.git.supermenu.button.ButtonHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -29,7 +29,7 @@ public abstract class AbstractMenu {
     protected boolean started = false;
 
     @NotNull
-    private final MenuManager menuManager;
+    private final SuperMenu superMenu;
 
     @NotNull
     protected final Inventory inventory;
@@ -54,7 +54,7 @@ public abstract class AbstractMenu {
     }
 
     public AbstractMenu(int rows, String title) {
-        this.menuManager = MenuManager.getManager();
+        this.superMenu = SuperMenu.getManager();
         this.inventory = Bukkit.createInventory(null, Math.min(6, rows) * 9, title);
         this.buttons = new HashMap<>();
         this.cooldown = new CooldownManager(150L);
@@ -83,11 +83,11 @@ public abstract class AbstractMenu {
     }
 
     public final void setTask(@NotNull Runnable runnable) {
-        this.menuTask = new MenuTask(menuManager.getInstance(), runnable);
+        this.menuTask = new MenuTask(superMenu.getInstance(), runnable);
     }
 
     public final void setTask(@NotNull Runnable runnable, long period) {
-        this.menuTask = new MenuTask(menuManager.getInstance(), runnable, period);
+        this.menuTask = new MenuTask(superMenu.getInstance(), runnable, period);
     }
 
     public final void unregisterOnClose(boolean unregister) {
@@ -100,7 +100,7 @@ public abstract class AbstractMenu {
 
     public final void open(@NotNull Player player) {
         if(!started) {
-            MenuManager.registerMenu(this);
+            SuperMenu.registerMenu(this);
             this.started = true;
             onStart();
             if(menuTask != null) {
@@ -113,7 +113,7 @@ public abstract class AbstractMenu {
 
     public final void unregister() {
         this.unregistered = true;
-        MenuManager.getManager().unregister(this);
+        SuperMenu.getManager().unregister(this);
     }
 
     @NotNull

@@ -7,15 +7,19 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class ItemButton extends ButtonHandler {
 
-    private final @NotNull BiConsumer<@NotNull Player, @NotNull ItemButtonState> action;
+    private final @NotNull Consumer<@NotNull ItemButtonState> action;
 
-    public ItemButton(@NotNull ItemStack stack, @NotNull BiConsumer<@NotNull Player, @NotNull ItemButtonState> action) {
+    public ItemButton(@NotNull ItemStack stack, @NotNull Runnable function) {
+        this(stack, state -> function.run());
+    }
+
+    public ItemButton(@NotNull ItemStack stack, @NotNull Consumer<@NotNull ItemButtonState> function) {
         super(stack.getType().isAir() ? new ItemStack(Material.STONE) : stack);
-        this.action = action;
+        this.action = function;
     }
 
     @Override
@@ -25,7 +29,7 @@ public class ItemButton extends ButtonHandler {
             return;
         }
 
-        action.accept(player, new ItemButtonState(event.getInventory(), event.getRawSlot(), event.getClick(), item));
+        action.accept(new ItemButtonState(event.getInventory(), player, event.getRawSlot(), event.getClick(), item));
     }
 
 }

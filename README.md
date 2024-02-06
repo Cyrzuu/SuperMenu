@@ -12,7 +12,7 @@ Wow coooooo 😮😎
 <dependency>
 <groupId>com.github.Cyrzuu</groupId>
 <artifactId>SuperMenu</artifactId>
-<version>2.2.1</version>
+<version>2.3.0</version>
 </dependency>
 ```
 
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-        implementation 'com.github.Cyrzuu:SuperMenu:2.2.1'
+        implementation 'com.github.Cyrzuu:SuperMenu:2.3.0'
 }
 ```
 
@@ -33,15 +33,18 @@ dependencies {
 
 
 Register
+
 ```java
+import me.cyrzu.git.supermenu.SuperMenu;
+
 public class Plugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        MenuManager.registerManager(this);
+        SuperMenu.registerManager(this);
 
         //code
-    } 
+    }
 
 } 
 ```
@@ -54,15 +57,15 @@ public class Class {
 
         fastMenu.setButton(3,
                 new ItemButton(new ItemStack(Material.IRON_SWORD),
-                        (player, state) -> {
-                            if(player.hasPermission("gamemode.survival")) player.setGameMode(GameMode.SURVIVAL);
-                            else player.sendMessage("No permission!");
+                        () -> {
+                            if(target.hasPermission("gamemode.survival")) target.setGameMode(GameMode.SURVIVAL);
+                            else target.sendMessage("No permission!");
                         }
                 ));
 
         fastMenu.setButton(5,
                 new ItemButton(new ItemStack(Material.GRASS_BLOCK),
-                        (player, state) -> {
+                        state -> {
                             if(player.hasPermission("gamemode.creative")) player.setGameMode(GameMode.CREATIVE);
                             else player.sendMessage("No permission!");
                         }
@@ -124,7 +127,6 @@ public class Class {
         pageMenu.onClickObject((player, object) -> player.getInventory().addItem(new ItemStack(object));
 
         pageMenu.fillBorder(new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
-
 
         pageMenu.open(target);
     }
