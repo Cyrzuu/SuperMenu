@@ -11,8 +11,8 @@ Wow coooooo 😮😎
 
 <dependency>
 <groupId>com.github.Cyrzuu</groupId>
-<artifactId>SuperMenu</artifactId>
-<version>2.3.0</version>
+    <artifactId>SuperMenu</artifactId>
+    <version>2.3.0</version>
 </dependency>
 ```
 
