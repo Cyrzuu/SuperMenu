@@ -30,20 +30,20 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     private final ArrayList<E> objects;
 
     @NotNull
-    public final BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> biFunction;
+    private final BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> biFunction;
 
     @Nullable
-    public BiConsumer<@NotNull Player, @NotNull E> objectClick;
+    private BiConsumer<@NotNull Player, @NotNull E> objectClick;
 
     private int nextPageSlot = -1;
 
     @Nullable
-    public Consumer<@NotNull Integer> next;
+    private Consumer<@NotNull Integer> next;
 
     private int previousPageSlot = -1;
 
     @Nullable
-    public Consumer<@NotNull Integer> previous;
+    private Consumer<@NotNull Integer> previous;
 
     public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull BiFunction<E, @NotNull Integer, @NotNull ItemStack> function) {
         this(rows, objects, "", function);
