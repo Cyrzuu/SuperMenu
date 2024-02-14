@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-public class PageMenu<E> extends AbstractMenu {
+public class PageMenu<E> extends AbstractMoveableMenu {
 
     @Getter
     private int pages;
