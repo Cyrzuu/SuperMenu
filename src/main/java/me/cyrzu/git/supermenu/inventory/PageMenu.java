@@ -21,7 +21,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     private int pages;
 
     @Getter
-    private int currentPage = 1;
+    private int currentPage = 0;
 
     @NotNull
     private final Slots slots;
@@ -54,8 +54,13 @@ public class PageMenu<E> extends AbstractMoveableMenu {
 
         this.biFunction = function;
         this.slots = new Slots(getInventory());
-        this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
+        this.pages = calculatePages(objects.size(), slots.size());
         this.objects = new ArrayList<>(objects);
+    }
+
+    public int calculatePages(int sizeList, int numberOfSlots) {
+        double ceil = Math.ceil((double) sizeList / numberOfSlots);
+        return (int) Math.max(0, ceil);
     }
 
     @Override
@@ -84,7 +89,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
 
         int i1 = slots.indexOf(slot);
         if(i1 >= 0) {
-            E e = objects.get(((currentPage - 1) * slots.size()) + i1);
+            E e = objects.get((currentPage * slots.size()) + i1);
             objectClick.accept(player, e);
         }
     }
@@ -138,12 +143,29 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
     }
 
+    public void setObjects(@NotNull Collection<E> objects) {
+        this.pages = calculatePages(objects.size(), slots.size());
+        this.objects.clear();
+        this.objects.addAll(objects);
+
+        if(!hasPage(currentPage)) {
+            firstPage();
+            return;
+        }
+
+        updateSlots();
+    }
+
     public boolean hasNextPage() {
-        return currentPage < pages;
+        return currentPage < (pages - 1);
     }
 
     public boolean hasPreviousPage() {
-        return currentPage > 1;
+        return currentPage > 0;
+    }
+
+    public boolean hasPage(int page) {
+        return page < pages;
     }
 
     public void nextPage() {
@@ -160,7 +182,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public void lastPage() {
-        this.currentPage = pages;
+        this.currentPage = pages - 1;
         updateSlots();
     }
 
@@ -178,18 +200,18 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public void firstPage() {
-        this.currentPage = 1;
+        this.currentPage = 0;
         updateSlots();
     }
 
     public void setPage(int page) {
-        this.currentPage = Math.max(1, Math.min(this.pages, page));
+        this.currentPage = Math.max(0, Math.min(this.pages, page));
         updateSlots();
     }
 
     private void updateSlots() {
-        ItemStack airStack = new ItemStack(Material.AIR);
-        slots.getSlots().forEach(slot -> setItem(slot, airStack));
+        ItemStack empty = new ItemStack(Material.AIR);
+        slots.getSlots().forEach(slot -> setItem(slot, empty));
 
         Integer[] slots = this.slots.getSlots().toArray(Integer[]::new);
         int[] objectsIndex = getObjectsIndex();
@@ -203,8 +225,8 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     private int[] getObjectsIndex() {
-        int start = (currentPage - 1) * slots.size();
-        int end = Math.min(currentPage * slots.size(), objects.size());
+        int start = currentPage * slots.size();
+        int end = Math.min((currentPage + 1) * slots.size(), objects.size());
         return IntStream.range(start, end).toArray();
     }
 
