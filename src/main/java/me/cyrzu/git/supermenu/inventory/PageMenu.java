@@ -89,6 +89,11 @@ public class PageMenu<E> extends AbstractMoveableMenu {
 
         int i1 = slots.indexOf(slot);
         if(i1 >= 0) {
+            int index = (currentPage * slots.size()) + i1;
+            if(index < 0 || index >= objects.size()) {
+                return;
+            }
+
             E e = objects.get((currentPage * slots.size()) + i1);
             objectClick.accept(player, e);
         }
@@ -134,7 +139,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     public void setSlots(@NotNull Range... ranges) {
         if(started) return;
         slots.setSlots(ranges);
-        this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
+        this.pages = calculatePages(objects.size(), slots.size());
     }
 
     public void setSlots(@NotNull Integer... integers) {
