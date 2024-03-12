@@ -10,9 +10,9 @@ Wow coooooo 😮😎
 </repository>
 
 <dependency>
-<groupId>com.github.Cyrzuu</groupId>
-<artifactId>SuperMenu</artifactId>
-<version>2.3.4</version>
+    <groupId>com.github.Cyrzuu</groupId>
+    <artifactId>SuperMenu</artifactId>
+    <version>2.3.4</version>
 </dependency>
 ```
 
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-        implementation 'com.github.Cyrzuu:SuperMenu:2.3.4'
+    implementation 'com.github.Cyrzuu:SuperMenu:2.3.4'
 }
 ```
 
