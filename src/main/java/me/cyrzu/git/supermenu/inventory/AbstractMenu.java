@@ -203,4 +203,15 @@ public abstract class AbstractMenu {
         inventory.getViewers().forEach(he -> he.getOpenInventory().setTitle(title));
     }
 
+    public void close() {
+        Iterator<HumanEntity> iterator = inventory.getViewers().iterator();
+        while (iterator.hasNext()) {
+            iterator.next().closeInventory();
+        }
+
+        if(!unregistered) {
+            unregister();
+        }
+    }
+
 }
