@@ -90,12 +90,10 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         int i1 = slots.indexOf(slot);
         if(i1 >= 0) {
             int index = (currentPage * slots.size()) + i1;
-            if(index < 0 || index >= objects.size()) {
-                return;
+            if (index >= 0 && index < objects.size()) {
+                E e = objects.get(index);
+                objectClick.accept(player, e);
             }
-
-            E e = objects.get((currentPage * slots.size()) + i1);
-            objectClick.accept(player, e);
         }
     }
 

@@ -6,9 +6,11 @@ import me.cyrzu.git.supermenu.MenuTask;
 import me.cyrzu.git.supermenu.SuperMenu;
 import me.cyrzu.git.supermenu.button.ButtonHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -195,6 +197,10 @@ public abstract class AbstractMenu {
 
     public int randomSlot() {
         return random.nextInt(inventory.getSize());
+    }
+
+    public void setTitle(@NotNull String title) {
+        inventory.getViewers().forEach(he -> he.getOpenInventory().setTitle(title));
     }
 
 }

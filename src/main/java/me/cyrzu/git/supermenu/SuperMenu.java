@@ -4,7 +4,11 @@ import me.cyrzu.git.supermenu.inventory.AbstractMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +20,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class SuperMenu {
+public class SuperMenu implements Listener {
 
     private @Nullable static SuperMenu manager = null;
 
@@ -92,8 +96,20 @@ public class SuperMenu {
         return inventories.get(inventory);
     }
 
+
+
     public JavaPlugin getInstance() {
         return instance;
+    }
+
+
+
+
+
+    @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent event) {
+        InventoryView view = event.getView();
+        view.setTitle("");
     }
 
 }
