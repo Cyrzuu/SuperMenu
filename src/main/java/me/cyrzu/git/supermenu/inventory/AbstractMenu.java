@@ -5,6 +5,7 @@ import me.cyrzu.git.supermenu.CooldownManager;
 import me.cyrzu.git.supermenu.MenuTask;
 import me.cyrzu.git.supermenu.SuperMenu;
 import me.cyrzu.git.supermenu.button.ButtonHandler;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -56,6 +57,10 @@ public abstract class AbstractMenu {
     }
 
     public AbstractMenu(int rows, String title) {
+        this(rows, Component.text(title));
+    }
+
+    public AbstractMenu(int rows, Component title) {
         this.superMenu = SuperMenu.getManager();
         this.inventory = Bukkit.createInventory(null, Math.min(6, rows) * 9, title);
         this.buttons = new HashMap<>();

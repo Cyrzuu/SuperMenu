@@ -2,6 +2,9 @@ Wow coooooo 😮😎
 
 [![](https://jitpack.io/v/Cyrzuu/SuperMenu.svg)](https://jitpack.io/#Cyrzuu/SuperMenu)
 
+**Version 3.0.0 and above uses paper-api**
+
+
 **Maven:**
 ```xml
 <repository>
@@ -12,7 +15,7 @@ Wow coooooo 😮😎
 <dependency>
 <groupId>com.github.Cyrzuu</groupId>
 <artifactId>SuperMenu</artifactId>
-<version>2.4.0</version>
+<version>3.0.0</version>
 </dependency>
 ```
 
@@ -24,7 +27,7 @@ repositories {
 }
 
 dependencies {
-        implementation 'com.github.Cyrzuu:SuperMenu:2.4.0'
+        implementation 'com.github.Cyrzuu:SuperMenu:3.0.0'
 }
 ```
 
