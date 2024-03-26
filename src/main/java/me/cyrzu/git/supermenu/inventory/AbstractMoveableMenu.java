@@ -1,6 +1,7 @@
 package me.cyrzu.git.supermenu.inventory;
 
 import me.cyrzu.git.supermenu.MenuMoveableSlot;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,11 @@ public abstract class AbstractMoveableMenu extends AbstractMenu {
     }
 
     public AbstractMoveableMenu(int rows, String title) {
+        super(rows, title);
+        this.moveableSlots = new HashMap<>();
+    }
+
+    public AbstractMoveableMenu(int rows, Component title) {
         super(rows, title);
         this.moveableSlots = new HashMap<>();
     }
