@@ -2,6 +2,7 @@ package me.cyrzu.git.supermenu.inventory;
 
 import lombok.Getter;
 import me.cyrzu.git.supermenu.Range;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -50,6 +51,10 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public PageMenu(int rows, @NotNull Collection<E> objects, String title, @NotNull BiFunction<E, @NotNull Integer, @NotNull ItemStack> function) {
+        this(rows, objects, Component.text(title), function);
+    }
+
+    public PageMenu(int rows, @NotNull Collection<E> objects, Component title, @NotNull BiFunction<E, @NotNull Integer, @NotNull ItemStack> function) {
         super(rows, title);
 
         this.biFunction = function;
