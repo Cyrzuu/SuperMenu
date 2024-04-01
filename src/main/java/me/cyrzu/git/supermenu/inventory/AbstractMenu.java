@@ -97,6 +97,10 @@ public abstract class AbstractMenu {
         this.menuTask = new MenuTask(superMenu.getInstance(), runnable, period);
     }
 
+    public final void setDisabledCooldownSlots(@NotNull Integer... slots) {
+        cooldown.disabledCooldown(slots);
+    }
+    
     public final void unregisterOnClose(boolean unregister) {
         this.unregisterOnClose = unregister;
     }
@@ -132,8 +136,8 @@ public abstract class AbstractMenu {
         return unregisterOnClose;
     }
 
-    public final boolean hasCooldown(@NotNull Player player) {
-        boolean b = cooldown.hasCooldown(player);
+    public final boolean hasCooldown(@NotNull Player player, int slot) {
+        boolean b = cooldown.hasCooldown(player, slot);
         if(!b) cooldown.setCooldown(player);
         return b;
     }

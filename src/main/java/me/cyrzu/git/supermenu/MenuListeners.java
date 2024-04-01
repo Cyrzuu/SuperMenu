@@ -27,12 +27,11 @@ public class MenuListeners implements Listener {
         Player player = (Player) event.getWhoClicked();
         AbstractMenu inventory = superMenu.getMenuHandler(event.getInventory());
         Inventory clickedInventory = event.getClickedInventory();
+        int rawSlot = event.getRawSlot();
 
         if(inventory instanceof AbstractMoveableMenu moveableMenu && moveableMenu.hasMoveableSlots()) {
-            int rawSlot = event.getRawSlot();
 
-            ItemStack cursor = event.getCursor();
-            if(cursor != null && event.getClick() == ClickType.DOUBLE_CLICK) {
+            if(event.getClick() == ClickType.DOUBLE_CLICK) {
                 event.setCancelled(true);
                 return;
             }
@@ -65,7 +64,7 @@ public class MenuListeners implements Listener {
         if(inventory != null) {
             event.setCancelled(true);
 
-            if(!inventory.hasCooldown(player)) {
+            if(!inventory.hasCooldown(player, rawSlot)) {
                 inventory.onClick(player, event);
             }
         }
