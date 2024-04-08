@@ -69,27 +69,27 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     @Override
-    protected void onClick(@NotNull Player player, int slot) {
+    protected boolean onClick(@NotNull Player player, int slot) {
         if(nextPageSlot != -1 && slot == nextPageSlot) {
             if(!hasNextPage()) {
-                return;
+                return false;
             }
 
             nextPage();
-            return;
+            return true;
         }
 
         if(previousPageSlot != -1 && slot == previousPageSlot) {
             if(!hasPreviousPage()) {
-                return;
+                return false;
             }
 
             previousPage();
-            return;
+            return true;
         }
 
         if(objectClick == null) {
-            return;
+            return false;
         }
 
         int i1 = slots.indexOf(slot);
@@ -100,6 +100,8 @@ public class PageMenu<E> extends AbstractMoveableMenu {
                 objectClick.accept(player, e);
             }
         }
+
+        return true;
     }
 
     @Override

@@ -69,12 +69,15 @@ public abstract class AbstractMenu {
 
     protected void onStart() { }
 
-    protected void onClick(@NotNull Player player, int slot) {
-
+    protected boolean onClick(@NotNull Player player, int slot) {
+        return true;
     }
 
     public final void onClick(@NotNull Player player, @NotNull InventoryClickEvent event) {
-        onClick(player, event.getRawSlot());
+        if(!onClick(player, event.getRawSlot())) {
+            return;
+        }
+
         ButtonHandler button = buttons.get(event.getRawSlot());
         if(button != null) {
             button.runClick(player, event);
