@@ -1,6 +1,7 @@
 package me.cyrzu.git.supermenu.inventory;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.cyrzu.git.supermenu.CooldownManager;
 import me.cyrzu.git.supermenu.MenuTask;
 import me.cyrzu.git.supermenu.SuperMenu;
@@ -51,6 +52,11 @@ public abstract class AbstractMenu {
     private final CooldownManager cooldown;
 
     private boolean unregisterOnClose = true;
+
+    @Setter
+    @Getter
+    @NotNull
+    private ItemStack[] lastContents = new ItemStack[0];
 
     public AbstractMenu(int rows) {
         this(rows, "");

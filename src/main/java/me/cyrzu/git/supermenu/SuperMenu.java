@@ -14,10 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class SuperMenu implements Listener {
@@ -84,6 +81,9 @@ public class SuperMenu implements Listener {
     }
 
     public void unregister(@NotNull AbstractMenu handler) {
+        ItemStack[] contents = handler.getInventory().getContents();
+        handler.setLastContents(Arrays.copyOf(contents, contents.length));
+
         handler.removeButtons();
         handler.fillAll(new ItemStack(Material.AIR));
         inventories.remove(handler.getInventory());
