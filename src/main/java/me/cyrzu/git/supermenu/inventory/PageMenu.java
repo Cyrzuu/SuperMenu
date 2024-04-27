@@ -36,12 +36,12 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     @Nullable
     private BiConsumer<@NotNull Player, @NotNull E> objectClick;
 
-    private int nextPageSlot = -1;
+    protected int nextPageSlot = -1;
 
     @Nullable
     private Consumer<@NotNull Integer> next;
 
-    private int previousPageSlot = -1;
+    protected int previousPageSlot = -1;
 
     @Nullable
     private Consumer<@NotNull Integer> previous;
@@ -71,20 +71,24 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     @Override
     protected boolean onClick(@NotNull Player player, int slot) {
         if(nextPageSlot != -1 && slot == nextPageSlot) {
-            if(!hasNextPage()) {
+            if(!this.hasNextPage()) {
                 return false;
             }
 
-            nextPage();
+            this.nextPage();
             return true;
         }
 
         if(previousPageSlot != -1 && slot == previousPageSlot) {
-            if(!hasPreviousPage()) {
+            if(!this.hasPreviousPage()) {
                 return false;
             }
 
-            previousPage();
+            this.previousPage();
+            return true;
+        }
+
+        if(buttons.get(slot) != null) {
             return true;
         }
 
