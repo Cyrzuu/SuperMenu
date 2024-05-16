@@ -20,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public abstract class AbstractMenu {
@@ -75,12 +77,20 @@ public abstract class AbstractMenu {
 
     protected void onStart() { }
 
+    protected boolean onFunctionClick(@NotNull Player player, @NotNull InventoryClickEvent event) {
+        return true;
+    }
+
     protected boolean onClick(@NotNull Player player, int slot) {
         return true;
     }
 
     public final void onClick(@NotNull Player player, @NotNull InventoryClickEvent event) {
-        if(!onClick(player, event.getRawSlot())) {
+        if(!this.onFunctionClick(player, event)) {
+            return;
+        }
+
+        if(!this.onClick(player, event.getRawSlot())) {
             return;
         }
 
@@ -88,6 +98,21 @@ public abstract class AbstractMenu {
         if(button != null) {
             button.runClick(player, event);
         }
+    }
+
+    public final void onClose(Runnable function) {
+        this.close = (player, menu) -> {
+            function.run();
+            return true;
+        };
+    }
+
+    public final void onClose(Supplier<Boolean> function) {
+        this.close = (player, menu) -> function.get();
+    }
+
+    public final void onClose(Predicate<@NotNull Player> canClose) {
+        this.close = (player, menu) -> canClose.test(player);
     }
 
     public final void onClose(BiPredicate<@NotNull Player, @NotNull AbstractMenu> canClose) {

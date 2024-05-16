@@ -1,10 +1,12 @@
 package me.cyrzu.git.supermenu.inventory;
 
 import lombok.Getter;
+import me.cyrzu.git.supermenu.ItemButtonState;
 import me.cyrzu.git.supermenu.Range;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class PageMenu<E> extends AbstractMoveableMenu {
@@ -34,7 +37,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     private final BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> biFunction;
 
     @Nullable
-    private BiConsumer<@NotNull Player, @NotNull E> objectClick;
+    private BiConsumer<@NotNull E, @NotNull ItemButtonState> objectClick;
 
     protected int nextPageSlot = -1;
 
@@ -46,15 +49,27 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     @Nullable
     private Consumer<@NotNull Integer> previous;
 
-    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull BiFunction<E, @NotNull Integer, @NotNull ItemStack> function) {
+    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull Function<@NotNull E, @NotNull ItemStack> function) {
+        this(rows, objects, ((e, integer) -> function.apply(e)));
+    }
+
+    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull String title, @NotNull Function<@NotNull E, @NotNull ItemStack> function) {
+        this(rows, objects, title, ((e, integer) -> function.apply(e)));
+    }
+
+    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull Component title, @NotNull Function<@NotNull E, @NotNull ItemStack> function) {
+        this(rows, objects, title, ((e, integer) -> function.apply(e)));
+    }
+
+    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
         this(rows, objects, "", function);
     }
 
-    public PageMenu(int rows, @NotNull Collection<E> objects, String title, @NotNull BiFunction<E, @NotNull Integer, @NotNull ItemStack> function) {
+    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull String title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
         this(rows, objects, Component.text(title), function);
     }
 
-    public PageMenu(int rows, @NotNull Collection<E> objects, Component title, @NotNull BiFunction<E, @NotNull Integer, @NotNull ItemStack> function) {
+    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull Component title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
         super(rows, title);
 
         this.biFunction = function;
@@ -69,7 +84,10 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     @Override
-    protected boolean onClick(@NotNull Player player, int slot) {
+    protected boolean onFunctionClick(@NotNull Player player, @NotNull InventoryClickEvent event) {
+        ItemStack currentItem = event.getCurrentItem();
+        int slot = event.getRawSlot();
+
         if(nextPageSlot != -1 && slot == nextPageSlot) {
             if(!this.hasNextPage()) {
                 return false;
@@ -101,20 +119,25 @@ public class PageMenu<E> extends AbstractMoveableMenu {
             int index = (currentPage * slots.size()) + i1;
             if (index >= 0 && index < objects.size()) {
                 E e = objects.get(index);
-                objectClick.accept(player, e);
+                objectClick.accept(e, new ItemButtonState(this.inventory, player, slot, event.getClick(), currentItem != null ? currentItem : new ItemStack(Material.STONE)));
             }
         }
 
         return true;
     }
 
+
     @Override
     protected void onStart() {
         updateSlots();
     }
 
-    public final void onClickObject(@NotNull BiConsumer<Player, E> consumer) {
-        this.objectClick = consumer;
+    public final void onClickObject(@NotNull Consumer<@NotNull E> fun) {
+        this.onClickObject((e, state) -> fun.accept(e));
+    }
+
+    public final void onClickObject(@NotNull BiConsumer<@NotNull E, @NotNull ItemButtonState> fun) {
+        this.objectClick = fun;
     }
 
     public void setNextPageButton(int slot, @NotNull ItemStack stack) {
