@@ -103,7 +103,7 @@ public class MenuListeners implements Listener {
             }
 
             if(menuHandler.isUnregisterOnClose()) {
-                superMenu.unregister(menuHandler);
+                superMenu.unregister(menuHandler, false);
             }
         }
     }

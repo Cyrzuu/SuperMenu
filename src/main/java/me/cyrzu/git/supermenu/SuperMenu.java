@@ -81,6 +81,10 @@ public class SuperMenu implements Listener {
     }
 
     public void unregister(@NotNull AbstractMenu handler) {
+        this.unregister(handler, true);
+    }
+
+    public void unregister(@NotNull AbstractMenu handler, boolean force) {
         ItemStack[] contents = handler.getInventory().getContents();
         handler.setLastContents(Arrays.copyOf(contents, contents.length));
 
@@ -89,7 +93,20 @@ public class SuperMenu implements Listener {
         inventories.remove(handler.getInventory());
 
         handler.cancelTask();
-        new ArrayList<>(handler.getInventory().getViewers()).forEach(HumanEntity::closeInventory);
+        List<HumanEntity> humanEntities = List.copyOf(handler.getInventory().getViewers());
+        if(force) {
+            humanEntities.forEach(HumanEntity::closeInventory);
+            return;
+        }
+
+        Inventory inventory = handler.getInventory();
+        Bukkit.getScheduler().runTask(instance, () -> humanEntities.forEach(human -> {
+            if(!human.getOpenInventory().getTopInventory().equals(inventory)) {
+                return;
+            }
+
+            human.closeInventory();
+        }));
     }
 
     public @Nullable AbstractMenu getMenuHandler(Inventory inventory) {
