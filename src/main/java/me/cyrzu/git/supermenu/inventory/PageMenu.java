@@ -142,8 +142,13 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public void setNextPageButton(int slot, @NotNull ItemStack stack) {
-        setNextPageButton(slot, stack, null);
+        setNextPageButton(slot, stack, () -> {});
     }
+
+    public void setNextPageButton(int slot, @NotNull ItemStack stack, @Nullable Runnable onClick) {
+        this.setNextPageButton(slot, stack, onClick != null ? index -> onClick.run() : null);
+    }
+
 
     public void setNextPageButton(int slot, @NotNull ItemStack stack, @Nullable Consumer<Integer> onClick) {
         nextPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
@@ -153,7 +158,11 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public void setPreviousPageButton(int slot, @NotNull ItemStack stack) {
-        setPreviousPageButton(slot, stack, null);
+        setPreviousPageButton(slot, stack, () -> {});
+    }
+
+    public void setPreviousPageButton(int slot, @NotNull ItemStack stack, @Nullable Runnable onClick) {
+        this.setPreviousPageButton(slot, stack, onClick != null ? index -> onClick.run() : null);
     }
 
     public void setPreviousPageButton(int slot, @NotNull ItemStack stack, @Nullable Consumer<Integer> onClick) {
