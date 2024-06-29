@@ -2,17 +2,19 @@ package me.cyrzu.git.supermenu.inventory;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.cyrzu.git.supermenu.CooldownManager;
+import me.cyrzu.git.supermenu.ItemButtonState;
 import me.cyrzu.git.supermenu.MenuTask;
 import me.cyrzu.git.supermenu.SuperMenu;
 import me.cyrzu.git.supermenu.button.ButtonHandler;
+import me.cyrzu.git.supermenu.button.EmptyButton;
+import me.cyrzu.git.supermenu.button.ItemButton;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -71,6 +74,17 @@ public abstract class AbstractMenu {
     public AbstractMenu(int rows, Component title) {
         this.superMenu = SuperMenu.getManager();
         this.inventory = Bukkit.createInventory(null, Math.min(6, rows) * 9, title);
+        this.buttons = new HashMap<>();
+        this.cooldown = new CooldownManager(150L);
+    }
+
+    public AbstractMenu(@NotNull InventoryType type, @NotNull String title) {
+        this(type, Component.text(title));
+    }
+
+    public AbstractMenu(@NotNull InventoryType type, @NotNull Component title) {
+        this.superMenu = SuperMenu.getManager();
+        this.inventory = Bukkit.createInventory(null, type, title);
         this.buttons = new HashMap<>();
         this.cooldown = new CooldownManager(150L);
     }
@@ -174,6 +188,45 @@ public abstract class AbstractMenu {
         boolean b = cooldown.hasCooldown(player, slot);
         if(!b) cooldown.setCooldown(player);
         return b;
+    }
+
+    public final void setButtons(@Nullable ItemStack itemStack, @NotNull Runnable fun, @NotNull Integer... slots) {
+        this.setButtons(itemStack, fun, Arrays.asList(slots));
+    }
+
+    public final void setButtons(@Nullable ItemStack itemStack, @NotNull Runnable fun, @NotNull Collection<Integer> slots) {
+        for (Integer slot : slots) {
+            this.setButton(slot, itemStack, fun);
+        }
+    }
+
+    public final void setButtons(@Nullable ItemStack itemStack, @NotNull Consumer<ItemButtonState> fun, @NotNull Integer... slots) {
+        this.setButtons(itemStack, fun, Arrays.asList(slots));
+    }
+
+    public final void setButtons(@Nullable ItemStack itemStack, @NotNull Consumer<ItemButtonState> fun, @NotNull Collection<Integer> slots) {
+        for (Integer slot : slots) {
+            this.setButton(slot, itemStack, fun);
+        }
+    }
+
+    public final void setButtons(ButtonHandler buttonHandler, @NotNull Integer... slots) {
+        this.setButtons(buttonHandler, Arrays.asList(slots));
+    }
+
+    public final void setButtons(ButtonHandler buttonHandler, @NotNull Collection<Integer> slots) {
+        for (Integer slot : slots) {
+            this.setButton(slot, buttonHandler);
+        }
+    }
+
+    public final void setButton(int slot, @Nullable ItemStack itemStack, @NotNull Runnable fun) {
+        this.setButton(slot, itemStack, state -> fun.run());
+    }
+
+    public final void setButton(int slot, @Nullable ItemStack itemStack, @NotNull Consumer<ItemButtonState> fun) {
+        this.setButton(slot, itemStack == null || itemStack.getType().isAir() ?
+                new EmptyButton(fun) : new ItemButton(itemStack, fun));
     }
 
     public final void setButton(int slot, ButtonHandler buttonHandler) {

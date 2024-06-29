@@ -1,11 +1,11 @@
-package me.cyrzu.git.supermenu;
+package me.cyrzu.git.supermenu.inventory;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class CooldownManager {
+class CooldownManager {
 
     @NotNull
     private final Map<UUID, Long> cooldowns = new HashMap<>();

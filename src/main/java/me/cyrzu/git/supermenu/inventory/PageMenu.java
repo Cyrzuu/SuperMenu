@@ -17,6 +17,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PageMenu<E> extends AbstractMoveableMenu {
@@ -288,14 +289,9 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         }
 
         public void setSlots(@NotNull Range... ranges) {
-            if(ranges == null || ranges.length == 0) {
-                return;
-            }
-
-            setSlots(Arrays.stream(ranges)
+            this.setSlots(Arrays.stream(ranges)
                     .flatMap(range -> range.get().stream())
-                    .distinct()
-                    .toList());
+                    .collect(Collectors.toSet()));
         }
 
         public void setSlots(@NotNull Integer... integers) {
@@ -303,7 +299,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
                 return;
             }
 
-            setSlots(Arrays.stream(integers)
+            this.setSlots(Arrays.stream(integers)
                     .distinct()
                     .toList());
         }

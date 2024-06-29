@@ -1,5 +1,6 @@
 package me.cyrzu.git.supermenu;
 
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.stream.IntStream;
 
 public class Range {
 
+    @Getter
     private final int start;
 
     private final int end;
@@ -18,16 +20,12 @@ public class Range {
         this.end = Math.max(start, end);
     }
 
-    public int getStart() {
-        return Math.min(start, end);
-    }
-
     public int getEnd() {
-        return Math.max(start, end);
+        return end;
     }
 
     public List<@NotNull Integer> get() {
-        return IntStream.rangeClosed(getStart(), getEnd()).boxed().toList();
+        return IntStream.rangeClosed(start, end).boxed().toList();
     }
 
 }
