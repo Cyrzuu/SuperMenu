@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -72,6 +73,23 @@ public class PageMenu<E> extends AbstractMoveableMenu {
 
     public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull Component title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
         super(rows, title);
+
+        this.biFunction = function;
+        this.slots = new Slots(getInventory());
+        this.pages = calculatePages(objects.size(), slots.size());
+        this.objects = new ArrayList<>(objects);
+    }
+
+    public PageMenu(@NotNull InventoryType type, @NotNull Collection<E> objects, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
+        this(type, objects, "", function);
+    }
+
+    public PageMenu(@NotNull InventoryType type, @NotNull Collection<E> objects, @NotNull String title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
+        this(type, objects, Component.text(title), function);
+    }
+
+    public PageMenu(@NotNull InventoryType type, @NotNull Collection<E> objects, @NotNull Component title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
+        super(type, title);
 
         this.biFunction = function;
         this.slots = new Slots(getInventory());

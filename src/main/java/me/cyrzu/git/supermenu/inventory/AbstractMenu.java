@@ -78,6 +78,10 @@ public abstract class AbstractMenu {
         this.cooldown = new CooldownManager(150L);
     }
 
+    public AbstractMenu(@NotNull InventoryType type) {
+        this(type, "");
+    }
+
     public AbstractMenu(@NotNull InventoryType type, @NotNull String title) {
         this(type, Component.text(title));
     }
