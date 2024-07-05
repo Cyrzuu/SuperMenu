@@ -10,6 +10,8 @@ public class MenuTask {
 
     private final JavaPlugin instance;
 
+    private final boolean async;
+
     private final long period;
 
     private final @NotNull Runnable runnable;
@@ -17,13 +19,14 @@ public class MenuTask {
     private @Nullable BukkitTask task;
 
     public MenuTask(JavaPlugin instance, @NotNull Runnable runnable) {
-        this(instance, runnable, 20);
+        this(instance, runnable, 20, false);
     }
 
-    public MenuTask(JavaPlugin instance, @NotNull Runnable runnable, long period) {
+    public MenuTask(JavaPlugin instance, @NotNull Runnable runnable, long period, boolean async) {
         this.instance = instance;
         this.period = Math.max(1, period);
         this.runnable = runnable;
+        this.async = async;
     }
 
     public void run() {
@@ -31,7 +34,9 @@ public class MenuTask {
             return;
         }
 
-        this.task = Bukkit.getScheduler().runTaskTimer(instance, runnable, 0, period);
+        this.task = async ?
+                Bukkit.getScheduler().runTaskTimerAsynchronously(instance, runnable, 0, period) :
+                Bukkit.getScheduler().runTaskTimer(instance, runnable, 0, period);
     }
 
     public void cancel() {

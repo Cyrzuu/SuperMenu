@@ -145,8 +145,8 @@ public abstract class AbstractMenu {
         this.menuTask = new MenuTask(superMenu.getInstance(), runnable);
     }
 
-    public final void setTask(@NotNull Runnable runnable, long period) {
-        this.menuTask = new MenuTask(superMenu.getInstance(), runnable, period);
+    public final void setTask(@NotNull Runnable runnable, long period, boolean async) {
+        this.menuTask = new MenuTask(superMenu.getInstance(), runnable, period, async);
     }
 
     public final void setDisabledCooldownSlots(@NotNull Integer... slots) {
