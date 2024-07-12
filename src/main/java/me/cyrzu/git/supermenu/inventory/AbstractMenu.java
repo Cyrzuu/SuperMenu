@@ -11,6 +11,7 @@ import me.cyrzu.git.supermenu.button.EmptyButton;
 import me.cyrzu.git.supermenu.button.ItemButton;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -270,8 +271,8 @@ public abstract class AbstractMenu {
         stream.forEach(slot -> this.setItem(slot, stack));
     }
 
-    public final void setItem(@NotNull Map<ItemStack, Integer> map) {
-        map.forEach(this::setItem);
+    public final void setItem(@NotNull ItemStack stack, @NotNull Integer[] slots) {
+        Arrays.stream(slots).forEach(slot -> this.setItem(slot, stack));
     }
 
     public final void setItem(@NotNull ItemStack stack, int... slots) {
