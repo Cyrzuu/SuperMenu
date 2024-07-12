@@ -25,7 +25,11 @@ public class Range {
     }
 
     public List<@NotNull Integer> get() {
-        return IntStream.rangeClosed(start, end).boxed().toList();
+        return this.getStream().boxed().toList();
+    }
+
+    public IntStream getStream() {
+        return IntStream.rangeClosed(start, end);
     }
 
 }

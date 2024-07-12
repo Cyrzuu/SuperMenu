@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.cyrzu.git.supermenu.ItemButtonState;
 import me.cyrzu.git.supermenu.MenuTask;
+import me.cyrzu.git.supermenu.Range;
 import me.cyrzu.git.supermenu.SuperMenu;
 import me.cyrzu.git.supermenu.button.ButtonHandler;
 import me.cyrzu.git.supermenu.button.EmptyButton;
@@ -195,8 +196,16 @@ public abstract class AbstractMenu {
         return b;
     }
 
-    public final void setButtons(@Nullable ItemStack itemStack, @NotNull Runnable fun, @NotNull Integer... slots) {
-        this.setButtons(itemStack, fun, Arrays.asList(slots));
+    public final void setButtons(@Nullable ItemStack itemStack, @NotNull Runnable fun, Range... ranges) {
+        this.setButtons(itemStack, fun, Arrays.stream(ranges).flatMapToInt(Range::getStream));
+    }
+
+    public final void setButtons(@Nullable ItemStack itemStack, @NotNull Runnable fun, IntStream stream) {
+        this.setButtons(itemStack, fun, stream.boxed().toList());
+    }
+
+    public final void setButtons(@Nullable ItemStack itemStack, @NotNull Runnable fun, int... slots) {
+        this.setButtons(itemStack, fun, IntStream.of(slots).boxed().toList());
     }
 
     public final void setButtons(@Nullable ItemStack itemStack, @NotNull Runnable fun, @NotNull Collection<Integer> slots) {
@@ -253,8 +262,16 @@ public abstract class AbstractMenu {
         buttons.remove(slot);
     }
 
+    public final void setItem(@NotNull ItemStack itemStack, Range... ranges) {
+        this.setItem(itemStack, Arrays.stream(ranges).flatMapToInt(Range::getStream));
+    }
+
     public final void setItem(@NotNull ItemStack stack, @NotNull IntStream stream) {
         stream.forEach(slot -> this.setItem(slot, stack));
+    }
+
+    public final void setItem(@NotNull Map<ItemStack, Integer> map) {
+        map.forEach(this::setItem);
     }
 
     public final void setItem(@NotNull ItemStack stack, int... slots) {

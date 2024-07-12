@@ -198,13 +198,19 @@ public class PageMenu<E> extends AbstractMoveableMenu {
 
     public void setSlots(@NotNull Range... ranges) {
         if(started) return;
-        slots.setSlots(ranges);
+        slots.setSlots(Arrays.stream(ranges).flatMapToInt(Range::getStream));
         this.pages = calculatePages(objects.size(), slots.size());
     }
 
-    public void setSlots(@NotNull Integer... integers) {
+    public void setSlots(int... integers) {
         if(started) return;
         slots.setSlots(integers);
+        this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
+    }
+
+    public void setSlots(@NotNull IntStream stream) {
+        if(started) return;
+        slots.setSlots(stream);
         this.pages = Math.max(1, (int) Math.ceil((double) objects.size() / slots.size()));
     }
 
@@ -333,16 +339,6 @@ public class PageMenu<E> extends AbstractMoveableMenu {
             }
 
             this.setSlots(IntStream.of(integers));
-        }
-
-        public void setSlots(@NotNull Integer... integers) {
-            if(integers == null || integers.length == 0) {
-                return;
-            }
-
-            this.setSlots(Arrays.stream(integers)
-                    .distinct()
-                    .toList());
         }
 
         public int indexOf(int slot) {
