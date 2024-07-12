@@ -26,6 +26,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public abstract class AbstractMenu {
 
@@ -252,9 +253,12 @@ public abstract class AbstractMenu {
         buttons.remove(slot);
     }
 
+    public final void setItem(@NotNull ItemStack stack, @NotNull IntStream stream) {
+        stream.forEach(slot -> this.setItem(slot, stack));
+    }
 
-    public final void setItem(@NotNull ItemStack stack, @NotNull Integer... slots) {
-        Arrays.stream(slots).forEach(slot -> setItem(slot, stack));
+    public final void setItem(@NotNull ItemStack stack, int... slots) {
+        Arrays.stream(slots).forEach(slot -> this.setItem(slot, stack));
     }
 
     public final void setItem(int slot, @NotNull ItemStack stack) {

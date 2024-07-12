@@ -214,11 +214,11 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this.objects.addAll(objects);
 
         if(!hasPage(currentPage)) {
-            firstPage();
+            this.firstPage();
             return;
         }
 
-        updateSlots();
+        this.updateSlots();
     }
 
     public boolean hasNextPage() {
@@ -234,12 +234,12 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public void nextPage() {
-        if(!hasNextPage()) {
+        if(!this.hasNextPage()) {
             throw new RuntimeException("Next page not found");
         }
 
         currentPage++;
-        updateSlots();
+        this.updateSlots();
 
         if(next != null) {
             next.accept(currentPage);
@@ -248,7 +248,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
 
     public void lastPage() {
         this.currentPage = pages - 1;
-        updateSlots();
+        this.updateSlots();
     }
 
     public void previousPage() {
@@ -257,7 +257,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         }
 
         currentPage--;
-        updateSlots();
+        this.updateSlots();
 
         if(previous != null) {
             previous.accept(currentPage);
@@ -266,12 +266,12 @@ public class PageMenu<E> extends AbstractMoveableMenu {
 
     public void firstPage() {
         this.currentPage = 0;
-        updateSlots();
+        this.updateSlots();
     }
 
     public void setPage(int page) {
         this.currentPage = Math.max(0, Math.min(this.pages, page));
-        updateSlots();
+        this.updateSlots();
     }
 
     private void updateSlots() {
@@ -305,7 +305,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         private Integer[] arraySlots = new Integer[]{0};
 
         public Slots(@NotNull Inventory inventory) {
-            setSlots(IntStream.range(0, inventory.getSize())
+            this.setSlots(IntStream.range(0, inventory.getSize())
                     .boxed()
                     .toList());
         }
@@ -319,6 +319,20 @@ public class PageMenu<E> extends AbstractMoveableMenu {
             this.setSlots(Arrays.stream(ranges)
                     .flatMap(range -> range.get().stream())
                     .collect(Collectors.toSet()));
+        }
+
+        public void setSlots(@NotNull IntStream stream) {
+            this.setSlots(stream.boxed()
+                    .distinct()
+                    .toList());
+        }
+
+        public void setSlots(int... integers) {
+            if(integers.length == 0) {
+                return;
+            }
+
+            this.setSlots(IntStream.of(integers));
         }
 
         public void setSlots(@NotNull Integer... integers) {
