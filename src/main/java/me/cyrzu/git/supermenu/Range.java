@@ -32,4 +32,8 @@ public class Range {
         return IntStream.rangeClosed(start, end);
     }
 
+    public static Range of(int start, int end) {
+        return new Range(start, end);
+    }
+
 }

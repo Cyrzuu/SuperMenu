@@ -1,7 +1,10 @@
 package me.cyrzu.git.supermenu;
 
+import me.cyrzu.git.supermenu.button.ButtonHandler;
+import me.cyrzu.git.supermenu.inventory.AbstractFullMoveableMenu;
 import me.cyrzu.git.supermenu.inventory.AbstractMenu;
 import me.cyrzu.git.supermenu.inventory.AbstractMoveableMenu;
+import me.cyrzu.git.supermenu.inventory.FullMoveableMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,13 +32,36 @@ public class MenuListeners implements Listener {
         Inventory clickedInventory = event.getClickedInventory();
         int rawSlot = event.getRawSlot();
 
-        if(inventory instanceof AbstractMoveableMenu moveableMenu && moveableMenu.hasMoveableSlots()) {
-
-            if(event.getClick() == ClickType.DOUBLE_CLICK) {
+        if(inventory instanceof AbstractFullMoveableMenu moveableMenu) {
+            if(event.getClick() == ClickType.DOUBLE_CLICK || event.getClick() == ClickType.NUMBER_KEY) {
                 event.setCancelled(true);
                 return;
             }
 
+            if(clickedInventory == null) {
+                return;
+            }
+
+            if(!moveableMenu.isFiltered(event.getCurrentItem())) {
+                event.setCancelled(true);
+                return;
+            }
+
+            ButtonHandler button = moveableMenu.getButton(rawSlot);
+            if(moveableMenu.isDisabled(rawSlot) || button != null) {
+                if(button != null) {
+                    button.runClick(player, event);
+                }
+
+                event.setCancelled(true);
+                return;
+            }
+
+
+            return;
+        }
+
+        if(inventory instanceof AbstractMoveableMenu moveableMenu && moveableMenu.hasMoveableSlots()) {
             if(clickedInventory != null) {
                 if(clickedInventory.getType() == InventoryType.PLAYER) {
                     if(event.isShiftClick()) {
@@ -47,8 +73,9 @@ public class MenuListeners implements Listener {
 
                 MenuMoveableSlot menuMoveableSlot = moveableMenu.getMoveableSlot(rawSlot);
                 if(menuMoveableSlot != null) {
-                    if(!menuMoveableSlot.canMove(player, event))
+                    if(!menuMoveableSlot.canMove(player, event)) {
                         event.setCancelled(true);
+                    }
 
                     return;
                 } else if(clickedInventory.getType() != InventoryType.PLAYER) {
@@ -76,7 +103,16 @@ public class MenuListeners implements Listener {
         AbstractMenu menuHandler = superMenu.getMenuHandler(event.getInventory());
         int size = event.getInventory().getSize() - 1;
 
-        if(menuHandler instanceof AbstractMoveableMenu moveableMenu) {
+        if(menuHandler instanceof AbstractFullMoveableMenu moveableMenu) {
+            if(event.getRawSlots().size() == 1) {
+                event.getRawSlots().stream().findFirst().ifPresent(slot -> {
+                    if((moveableMenu.isDisabled(slot)) && slot < size) {
+                        System.out.println("ja canceluje! 1");
+                        event.setCancelled(true);
+                    }
+                });
+            }
+        } else if(menuHandler instanceof AbstractMoveableMenu moveableMenu) {
             if(event.getRawSlots().size() == 1) {
                 event.getRawSlots().stream().findFirst().ifPresent(slot -> {
                     MenuMoveableSlot moveableSlot = moveableMenu.getMoveableSlot(slot);

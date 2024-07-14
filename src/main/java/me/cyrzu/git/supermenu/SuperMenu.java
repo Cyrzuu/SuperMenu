@@ -1,5 +1,6 @@
 package me.cyrzu.git.supermenu;
 
+import lombok.Getter;
 import me.cyrzu.git.supermenu.inventory.AbstractMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -45,6 +46,7 @@ public class SuperMenu implements Listener {
         manager.register(menuHandler);
     }
 
+    @Getter
     private final JavaPlugin instance;
 
     @NotNull
@@ -112,16 +114,6 @@ public class SuperMenu implements Listener {
     public @Nullable AbstractMenu getMenuHandler(Inventory inventory) {
         return inventories.get(inventory);
     }
-
-
-
-    public JavaPlugin getInstance() {
-        return instance;
-    }
-
-
-
-
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {

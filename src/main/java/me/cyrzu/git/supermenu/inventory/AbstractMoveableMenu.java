@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public abstract class AbstractMoveableMenu extends AbstractMenu {
 
@@ -45,12 +47,55 @@ public abstract class AbstractMoveableMenu extends AbstractMenu {
         this.moveableSlots = new HashMap<>();
     }
 
+    public final void setMoveableSlots(int[] slots) {
+        for (int slot : slots) {
+            this.setMoveableSlot(slot);
+        }
+    }
+
+    public final void setMoveableSlots(@NotNull IntStream stream, @Nullable Function<ItemStack, Boolean> put,
+                                       @Nullable Function<ItemStack, Boolean> take) {
+        for (int slot : stream.toArray()) {
+            this.setMoveableSlot(slot, put, take);
+        }
+    }
+
+    public final void setMoveableSlots(@NotNull IntStream stream, @Nullable BiFunction<Player, ItemStack, Boolean> put,
+                                       @Nullable BiFunction<Player, ItemStack, Boolean> take) {
+        for (int slot : stream.toArray()) {
+            this.setMoveableSlot(slot, put, take);
+        }
+    }
+
+    public final void setMoveableSlots(int[] slots, @Nullable Function<ItemStack, Boolean> put,
+                                       @Nullable Function<ItemStack, Boolean> take) {
+        for (int slot : slots) {
+            this.setMoveableSlot(slot, put, take);
+        }
+    }
+
+    public final void setMoveableSlots(int[] slots, @Nullable BiFunction<Player, ItemStack, Boolean> put,
+                                      @Nullable BiFunction<Player, ItemStack, Boolean> take) {
+        for (int slot : slots) {
+            this.setMoveableSlot(slot, put, take);
+        }
+    }
+
     public final void setMoveableSlot(int slot) {
-        setMoveableSlot(slot, null, null);
+        this.setMoveableSlot(slot, (Function<ItemStack, Boolean>) null, null);
+    }
+
+    public final void setMoveableSlot(int slot, @Nullable Function<ItemStack, Boolean> put) {
+        this.setMoveableSlot(slot, put == null ? null : (p, i) -> put.apply(i), null);
     }
 
     public final void setMoveableSlot(int slot, @Nullable BiFunction<Player, ItemStack, Boolean> put) {
-        setMoveableSlot(slot, put, null);
+        this.setMoveableSlot(slot, put, null);
+    }
+
+    public final void setMoveableSlot(int slot, @Nullable Function<ItemStack, Boolean> put,
+                                      @Nullable Function<ItemStack, Boolean> take) {
+        this.setMoveableSlot(slot, put == null ? null : (p, i) -> put.apply(i), take == null ? null : (p, i) -> take.apply(i));
     }
 
     public final void setMoveableSlot(int slot, @Nullable BiFunction<Player, ItemStack, Boolean> put,

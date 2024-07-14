@@ -33,7 +33,7 @@ import java.util.stream.IntStream;
 public abstract class AbstractMenu {
 
     @NotNull
-    public static Random random = new Random();
+    private static final Random random = new Random();
 
     @Getter
     protected boolean unregistered = false;
@@ -279,6 +279,10 @@ public abstract class AbstractMenu {
         Arrays.stream(slots).forEach(slot -> this.setItem(slot, stack));
     }
 
+    public final void setItem(@NotNull ItemStack stack, Collection<Integer> slots) {
+        slots.forEach(slot -> this.setItem(slot, stack));
+    }
+
     public final void setItem(int slot, @NotNull ItemStack stack) {
         inventory.setItem(Math.min(inventory.getSize() - 1, slot), stack);
     }
@@ -305,15 +309,20 @@ public abstract class AbstractMenu {
         }
     }
 
-    public final void fillBorder(@NotNull ItemStack stack) {
+    public final int[] getBorderSlots() {
         int rows = inventory.getSize() / 9;
         if (rows <= 2) {
-            return;
+            return new int[0];
         }
 
-        for (int i = 0; i < rows * 9; i++) {
-            if (i <= 8 || (i >= rows * 9 - 8 && i <= rows * 9 - 2) || i % 9 == 0 || i % 9 == 8)
-                inventory.setItem(i, stack);
+        return IntStream.range(0, rows * 9)
+                .filter(i -> (i <= 8 || (i >= rows * 9 - 8 && i <= rows * 9 - 2) || i % 9 == 0 || i % 9 == 8))
+                .toArray();
+    }
+
+    public final void fillBorder(@NotNull ItemStack stack) {
+        for (int borderSlot : this.getBorderSlots()) {
+            inventory.setItem(borderSlot, stack);
         }
     }
 

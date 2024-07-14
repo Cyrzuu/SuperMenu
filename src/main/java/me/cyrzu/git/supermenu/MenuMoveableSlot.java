@@ -41,10 +41,10 @@ public record MenuMoveableSlot(@Nullable BiFunction<Player, ItemStack, Boolean> 
         ClickType click = event.getClick();
 
         return switch (click) {
-            case LEFT, RIGHT -> check(player, event.getCursor(), event.getCurrentItem());
-            case DROP, CONTROL_DROP -> check(player, null, event.getCurrentItem());
-            case NUMBER_KEY -> check(player, playerInventory.getItem(event.getHotbarButton()), event.getCurrentItem());
-            case SWAP_OFFHAND -> check(player, playerInventory.getItemInOffHand(), event.getCurrentItem());
+            case LEFT, RIGHT -> this.check(player, event.getCursor(), event.getCurrentItem());
+            case DROP, CONTROL_DROP -> this.check(player, null, event.getCurrentItem());
+            case NUMBER_KEY -> this.check(player, playerInventory.getItem(event.getHotbarButton()), event.getCurrentItem());
+            case SWAP_OFFHAND -> this.check(player, playerInventory.getItemInOffHand(), event.getCurrentItem());
             case CREATIVE -> true;
             default -> false;
         };
