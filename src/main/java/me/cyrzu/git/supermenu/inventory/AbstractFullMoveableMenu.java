@@ -80,6 +80,21 @@ public abstract class AbstractFullMoveableMenu extends AbstractMenu {
         this.setItem(itemStack, this.disabled);
     }
 
+    public void clearAndSetEnabled(int... slots) {
+        this.clearAndSetEnabled(IntStream.of(slots).boxed().toList());
+    }
+
+    public void clearAndSetEnabled(@NotNull Collection<Integer> slots) {
+        if(this.started) {
+            return;
+        }
+
+        this.disabled.clear();
+        IntStream.range(0, inventory.getSize())
+            .filter(slot -> !slots.contains(slot))
+            .forEach(this::setDisabledSlot);
+    }
+
     public void setFilter(@NotNull Predicate<ItemStack> filter) {
         this.filter = filter;
     }
