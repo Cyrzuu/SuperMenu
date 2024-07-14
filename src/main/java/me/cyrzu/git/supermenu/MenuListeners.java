@@ -42,7 +42,7 @@ public class MenuListeners implements Listener {
                 return;
             }
 
-            if(!moveableMenu.isFiltered(event.getCurrentItem())) {
+            if(!moveableMenu.isDisabled(rawSlot) && !moveableMenu.isFiltered(event.getCurrentItem())) {
                 event.setCancelled(true);
                 return;
             }
@@ -107,7 +107,6 @@ public class MenuListeners implements Listener {
             if(event.getRawSlots().size() == 1) {
                 event.getRawSlots().stream().findFirst().ifPresent(slot -> {
                     if((moveableMenu.isDisabled(slot)) && slot < size) {
-                        System.out.println("ja canceluje! 1");
                         event.setCancelled(true);
                     }
                 });
