@@ -1,7 +1,6 @@
 package me.cyrzu.git.supermenu.inventory;
 
 import me.cyrzu.git.supermenu.SuperMenu;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.inventory.InventoryType;
@@ -34,20 +33,12 @@ public abstract class AbstractFullMoveableMenu extends AbstractMenu {
         this.disabled = new HashSet<>();
     }
 
-    public AbstractFullMoveableMenu(int rows, Component title) {
-        super(rows, title);
-        this.disabled = new HashSet<>();
-    }
-
     public AbstractFullMoveableMenu(@NotNull InventoryType type) {
         this(type, "");
     }
 
-    public AbstractFullMoveableMenu(@NotNull InventoryType type, @NotNull String title) {
-        this(type, Component.text(title));
-    }
 
-    public AbstractFullMoveableMenu(@NotNull InventoryType type, @NotNull Component title) {
+    public AbstractFullMoveableMenu(@NotNull InventoryType type, @NotNull String title) {
         super(type, title);
         this.disabled = new HashSet<>();
     }

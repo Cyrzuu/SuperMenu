@@ -9,9 +9,7 @@ import me.cyrzu.git.supermenu.SuperMenu;
 import me.cyrzu.git.supermenu.button.ButtonHandler;
 import me.cyrzu.git.supermenu.button.EmptyButton;
 import me.cyrzu.git.supermenu.button.ItemButton;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -70,11 +68,11 @@ public abstract class AbstractMenu {
         this(rows, "");
     }
 
-    public AbstractMenu(int rows, String title) {
-        this(rows, Component.text(title));
-    }
+//    public AbstractMenu(int rows, String title) {
+//        this(rows, Component.text(title));
+//    }
 
-    public AbstractMenu(int rows, Component title) {
+    public AbstractMenu(int rows, @NotNull String title) {
         this.superMenu = SuperMenu.getManager();
         this.inventory = Bukkit.createInventory(null, Math.min(6, rows) * 9, title);
         this.buttons = new HashMap<>();
@@ -84,12 +82,12 @@ public abstract class AbstractMenu {
     public AbstractMenu(@NotNull InventoryType type) {
         this(type, "");
     }
+//
+//    public AbstractMenu(@NotNull InventoryType type, @NotNull String title) {
+//        this(type, Component.text(title));
+//    }
 
     public AbstractMenu(@NotNull InventoryType type, @NotNull String title) {
-        this(type, Component.text(title));
-    }
-
-    public AbstractMenu(@NotNull InventoryType type, @NotNull Component title) {
         this.superMenu = SuperMenu.getManager();
         this.inventory = Bukkit.createInventory(null, type, title);
         this.buttons = new HashMap<>();

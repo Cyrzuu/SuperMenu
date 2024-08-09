@@ -3,7 +3,6 @@ package me.cyrzu.git.supermenu.inventory;
 import lombok.Getter;
 import me.cyrzu.git.supermenu.ItemButtonState;
 import me.cyrzu.git.supermenu.Range;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -59,19 +58,11 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this(rows, objects, title, ((e, integer) -> function.apply(e)));
     }
 
-    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull Component title, @NotNull Function<@NotNull E, @NotNull ItemStack> function) {
-        this(rows, objects, title, ((e, integer) -> function.apply(e)));
-    }
-
     public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
         this(rows, objects, "", function);
     }
 
     public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull String title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
-        this(rows, objects, Component.text(title), function);
-    }
-
-    public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull Component title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
         super(rows, title);
 
         this.biFunction = function;
@@ -85,10 +76,6 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public PageMenu(@NotNull InventoryType type, @NotNull Collection<E> objects, @NotNull String title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
-        this(type, objects, Component.text(title), function);
-    }
-
-    public PageMenu(@NotNull InventoryType type, @NotNull Collection<E> objects, @NotNull Component title, @NotNull BiFunction<@NotNull E, @NotNull Integer, @NotNull ItemStack> function) {
         super(type, title);
 
         this.biFunction = function;
