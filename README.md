@@ -3,6 +3,7 @@ Wow coooooo 😮😎
 [![](https://jitpack.io/v/Cyrzuu/SuperMenu.svg)](https://jitpack.io/#Cyrzuu/SuperMenu)
 
 **Version 3.0.0 and above uses paper-api**
+**Version 4.0.0 and above uses spigot-api**
 
 
 **Maven:**
