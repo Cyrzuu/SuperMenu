@@ -150,7 +150,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
 
     @Override
     protected void onStart() {
-        updateSlots();
+        this.updateSlots();
     }
 
     public final void onClickObject(@NotNull Consumer<@NotNull E> fun) {
