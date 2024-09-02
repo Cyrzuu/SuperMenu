@@ -43,12 +43,27 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     protected int nextPageSlot = -1;
 
     @Nullable
-    private Consumer<@NotNull Integer> next;
+    private Runnable next;
 
     protected int previousPageSlot = -1;
 
     @Nullable
-    private Consumer<@NotNull Integer> previous;
+    private Runnable previous;
+
+    @Nullable
+    private ItemStack emptySlot;
+
+    @Nullable
+    private ItemStack nextPageItem;
+
+    @Nullable
+    private ItemStack emptyNextPageItem;
+
+    @Nullable
+    private ItemStack previousPageItem;
+
+    @Nullable
+    private ItemStack emptyPreviousPageItem;
 
     public PageMenu(int rows, @NotNull Collection<E> objects, @NotNull Function<@NotNull E, @NotNull ItemStack> function) {
         this(rows, objects, ((e, integer) -> function.apply(e)));
@@ -66,7 +81,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         super(rows, title);
 
         this.biFunction = function;
-        this.slots = new Slots(getInventory());
+        this.slots = new Slots(this.getInventory());
         this.pages = calculatePages(objects.size(), slots.size());
         this.objects = new ArrayList<>(objects);
     }
@@ -79,8 +94,8 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         super(type, title);
 
         this.biFunction = function;
-        this.slots = new Slots(getInventory());
-        this.pages = calculatePages(objects.size(), slots.size());
+        this.slots = new Slots(this.getInventory());
+        this.pages = this.calculatePages(objects.size(), slots.size());
         this.objects = new ArrayList<>(objects);
     }
 
@@ -147,34 +162,39 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public void setNextPageButton(int slot, @NotNull ItemStack stack) {
-        setNextPageButton(slot, stack, () -> {});
+        this.setNextPageButton(slot, stack, () -> {});
     }
 
-    public void setNextPageButton(int slot, @NotNull ItemStack stack, @Nullable Runnable onClick) {
-        this.setNextPageButton(slot, stack, onClick != null ? index -> onClick.run() : null);
-    }
-
-
-    public void setNextPageButton(int slot, @NotNull ItemStack stack, @Nullable Consumer<Integer> onClick) {
+    public void setNextPageButton(int slot, @NotNull ItemStack stack, @Nullable Runnable runnable) {
         nextPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
         inventory.setItem(nextPageSlot, stack);
 
-        this.next = onClick;
+        this.next = runnable;
+    }
+
+    public void setNextPageButtons(int slot, @NotNull ItemStack item, @NotNull ItemStack itemEmpty, @Nullable Runnable fun) {
+        this.nextPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
+        this.inventory.setItem(this.nextPageSlot, this.hasNextPage() ? item : itemEmpty);
+
+        this.next = fun;
     }
 
     public void setPreviousPageButton(int slot, @NotNull ItemStack stack) {
         setPreviousPageButton(slot, stack, () -> {});
     }
 
-    public void setPreviousPageButton(int slot, @NotNull ItemStack stack, @Nullable Runnable onClick) {
-        this.setPreviousPageButton(slot, stack, onClick != null ? index -> onClick.run() : null);
-    }
-
-    public void setPreviousPageButton(int slot, @NotNull ItemStack stack, @Nullable Consumer<Integer> onClick) {
+    public void setPreviousPageButton(int slot, @NotNull ItemStack stack, @Nullable Runnable fun) {
         previousPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
         inventory.setItem(previousPageSlot, stack);
 
-        this.previous = onClick;
+        this.previous = fun;
+    }
+
+    public void setPreviousPageButtons(int slot, @NotNull ItemStack item, @NotNull ItemStack itemEmpty, @Nullable Runnable fun) {
+        this.previousPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
+        this.inventory.setItem(this.previousPageSlot, this.hasPreviousPage() ? item : itemEmpty);
+
+        this.previous = fun;
     }
 
     public void setSlots(@NotNull Collection<@NotNull Integer> slots) {
@@ -206,7 +226,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this.objects.clear();
         this.objects.addAll(objects);
 
-        if(!hasPage(currentPage)) {
+        if(!this.hasPage(currentPage)) {
             this.firstPage();
             return;
         }
@@ -235,7 +255,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this.updateSlots();
 
         if(next != null) {
-            next.accept(currentPage);
+            next.run();
         }
     }
 
@@ -245,7 +265,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     public void previousPage() {
-        if(!hasPreviousPage()) {
+        if(!this.hasPreviousPage()) {
             throw new RuntimeException("Previos page not found");
         }
 
@@ -253,7 +273,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this.updateSlots();
 
         if(previous != null) {
-            previous.accept(currentPage);
+            previous.run();
         }
     }
 
@@ -268,18 +288,27 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     }
 
     private void updateSlots() {
-        ItemStack empty = new ItemStack(Material.AIR);
-        slots.getSlots().forEach(slot -> setItem(slot, empty));
+        ItemStack empty = emptySlot != null ? emptySlot : new ItemStack(Material.AIR);
+        slots.getSlots().forEach(slot -> this.setItem(slot, empty));
 
         Integer[] slots = this.slots.getSlots().toArray(Integer[]::new);
-        int[] objectsIndex = getObjectsIndex();
+        int[] objectsIndex = this.getObjectsIndex();
         int index = 0;
 
         for (int i : objectsIndex) {
             E object = objects.get(i);
             ItemStack stack = biFunction.apply(object, i);
-            setItem(slots[index++], stack);
+            this.setItem(slots[index++], stack);
         }
+
+        if(this.nextPageSlot >= 0 && this.nextPageItem != null && this.emptyNextPageItem != null) {
+            this.setItem(this.nextPageSlot, this.hasNextPage() ? this.nextPageItem : this.emptyNextPageItem);
+        }
+
+        if(this.previousPageSlot >= 0 && this.previousPageItem != null && this.emptyPreviousPageItem != null) {
+            this.setItem(this.nextPageSlot, this.hasPreviousPage() ? this.previousPageItem : this.emptyPreviousPageItem);
+        }
+
     }
 
     private int[] getObjectsIndex() {
