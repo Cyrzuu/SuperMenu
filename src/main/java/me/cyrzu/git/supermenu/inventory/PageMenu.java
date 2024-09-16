@@ -177,7 +177,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this.inventory.setItem(this.nextPageSlot, this.hasNextPage() ? item : itemEmpty);
 
         this.nextPageItem = item;
-        this.emptyNextPageItem = item;
+        this.emptyNextPageItem = itemEmpty;
 
         this.next = fun;
     }
@@ -198,7 +198,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this.inventory.setItem(this.previousPageSlot, this.hasPreviousPage() ? item : itemEmpty);
 
         this.previousPageItem = item;
-        this.emptyPreviousPageItem = item;
+        this.emptyPreviousPageItem = itemEmpty;
 
         this.previous = fun;
     }
