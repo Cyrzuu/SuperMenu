@@ -316,7 +316,7 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         }
 
         if(this.previousPageSlot >= 0 && this.previousPageItem != null && this.emptyPreviousPageItem != null) {
-            this.setItem(this.nextPageSlot, this.hasPreviousPage() ? this.previousPageItem : this.emptyPreviousPageItem);
+            this.setItem(this.previousPageSlot, this.hasPreviousPage() ? this.previousPageItem : this.emptyPreviousPageItem);
         }
 
     }
