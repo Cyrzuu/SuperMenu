@@ -176,6 +176,9 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         this.nextPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
         this.inventory.setItem(this.nextPageSlot, this.hasNextPage() ? item : itemEmpty);
 
+        this.nextPageItem = item;
+        this.emptyNextPageItem = item;
+
         this.next = fun;
     }
 
@@ -193,6 +196,9 @@ public class PageMenu<E> extends AbstractMoveableMenu {
     public void setPreviousPageButtons(int slot, @NotNull ItemStack item, @NotNull ItemStack itemEmpty, @Nullable Runnable fun) {
         this.previousPageSlot = Math.min(inventory.getSize() - 1, Math.max(0, slot));
         this.inventory.setItem(this.previousPageSlot, this.hasPreviousPage() ? item : itemEmpty);
+
+        this.previousPageItem = item;
+        this.emptyPreviousPageItem = item;
 
         this.previous = fun;
     }
@@ -232,6 +238,10 @@ public class PageMenu<E> extends AbstractMoveableMenu {
         }
 
         this.updateSlots();
+    }
+
+    public void setEmptySlot(@Nullable ItemStack item) {
+        this.emptySlot = item;
     }
 
     public boolean hasNextPage() {
