@@ -67,13 +67,13 @@ public class Class {
                         }
                 ));
 
-        fastMenu.setButton(5,
-                new ItemButton(new ItemStack(Material.GRASS_BLOCK),
-                        state -> {
-                            if(player.hasPermission("gamemode.creative")) player.setGameMode(GameMode.CREATIVE);
+        fastMenu.setButton(5, new ItemStack(Material.GRASS_BLOCK), state -> {
+                            if(player.hasPermission("gamemode.creative")) {
+                                player.setGameMode(GameMode.CREATIVE);
+                            }
                             else player.sendMessage("No permission!");
                         }
-                ));
+                );
 
         fastMenu.open(target);
     }
