@@ -1,5 +1,6 @@
 package me.cyrzu.git.supermenu.inventory;
 
+import me.cyrzu.git.supermenu.Range;
 import me.cyrzu.git.supermenu.SuperMenu;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -53,6 +54,12 @@ public abstract class AbstractFullMoveableMenu extends AbstractMenu {
 
     public void setDisabledSlots(Collection<Integer> slots) {
         slots.forEach(this::setDisabledSlot);
+    }
+
+    public void setDisabledSlots(Range... ranges) {
+        for (Range range : ranges) {
+            this.setDisabledSlots(range.getStream());
+        }
     }
 
     public void setDisabledSlot(int slot) {

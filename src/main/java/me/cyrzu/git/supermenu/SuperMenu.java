@@ -95,13 +95,12 @@ public class SuperMenu implements Listener {
         inventories.remove(handler.getInventory());
 
         handler.cancelTask();
-        List<HumanEntity> humanEntities = List.copyOf(handler.getInventory().getViewers());
         if(force) {
-            humanEntities.forEach(HumanEntity::closeInventory);
+            List.copyOf(handler.getInventory().getViewers()).forEach(HumanEntity::closeInventory);
             return;
         }
 
-        Bukkit.getScheduler().runTask(instance, () -> humanEntities.forEach(HumanEntity::closeInventory));
+        Bukkit.getScheduler().runTask(instance, () -> List.copyOf(handler.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
     }
 
     public @Nullable AbstractMenu getMenuHandler(Inventory inventory) {

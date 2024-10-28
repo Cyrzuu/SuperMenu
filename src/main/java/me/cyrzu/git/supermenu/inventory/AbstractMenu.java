@@ -166,7 +166,7 @@ public abstract class AbstractMenu {
         if(!started) {
             SuperMenu.registerMenu(this);
             this.started = true;
-            onStart();
+            this.onStart();
             if(menuTask != null) {
                 menuTask.run();
             }
