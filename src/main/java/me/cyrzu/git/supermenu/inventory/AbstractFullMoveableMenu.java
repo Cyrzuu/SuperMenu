@@ -101,30 +101,42 @@ public abstract class AbstractFullMoveableMenu extends AbstractMenu {
         return itemStack == null || (this.filter == null || this.filter.test(itemStack));
     }
 
+    @NotNull
     public List<ItemStack> getItems(boolean removeItems) {
-        return this.getItems(removeItems, true);
+        return this.getItems(removeItems, false);
     }
 
-    public List<ItemStack> getItems(boolean removeItems, boolean removeAir) {
+    @NotNull
+    public List<ItemStack> getItems(boolean removeItems, boolean includeAir) {
         List<ItemStack> items = new ArrayList<>();
-        ItemStack air = new ItemStack(Material.AIR);
+        ItemStack airItem = new ItemStack(Material.AIR);
 
         int index = 0;
         for (ItemStack itemStack : this.inventory) {
-            if(itemStack == null || (itemStack.getType() == Material.AIR && removeAir) || this.isDisabled(index)) {
+            boolean isAir = itemStack == null || itemStack.getType() == Material.AIR;
+            if((isAir && !includeAir) || this.isDisabled(index)) {
                 index++;
                 continue;
             }
 
-            items.add(itemStack);
+            items.add(isAir ? airItem : itemStack);
             if(removeItems) {
-                inventory.setItem(index, air);
+                inventory.setItem(index, airItem);
             }
 
             index++;
         }
 
         return items;
+    }
+
+    public ItemStack[] getItemsArray(boolean removeItms) {
+        return this.getItemsArray(removeItms, false);
+    }
+
+    public ItemStack[] getItemsArray(boolean removeItms, boolean includeAir) {
+        List<ItemStack> items = this.getItems(removeItms, includeAir);
+        return items.toArray(ItemStack[]::new);
     }
 
     @Override
