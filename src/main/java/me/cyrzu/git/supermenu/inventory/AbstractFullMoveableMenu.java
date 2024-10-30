@@ -101,19 +101,23 @@ public abstract class AbstractFullMoveableMenu extends AbstractMenu {
         return itemStack == null || (this.filter == null || this.filter.test(itemStack));
     }
 
-    public List<ItemStack> getItems(boolean remove) {
+    public List<ItemStack> getItems(boolean removeItems) {
+        return this.getItems(removeItems, true);
+    }
+
+    public List<ItemStack> getItems(boolean removeItems, boolean removeAir) {
         List<ItemStack> items = new ArrayList<>();
         ItemStack air = new ItemStack(Material.AIR);
 
         int index = 0;
         for (ItemStack itemStack : this.inventory) {
-            if(itemStack == null || itemStack.getType() == Material.AIR || this.isDisabled(index)) {
+            if(itemStack == null || (itemStack.getType() == Material.AIR && removeAir) || this.isDisabled(index)) {
                 index++;
                 continue;
             }
 
             items.add(itemStack);
-            if(remove) {
+            if(removeItems) {
                 inventory.setItem(index, air);
             }
 
