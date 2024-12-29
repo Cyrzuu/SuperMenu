@@ -33,7 +33,8 @@ public class MenuListeners implements Listener {
         int rawSlot = event.getRawSlot();
 
         if(inventory instanceof AbstractFullMoveableMenu moveableMenu) {
-            if(event.getClick() == ClickType.DOUBLE_CLICK || event.getClick() == ClickType.NUMBER_KEY) {
+            ClickType click = event.getClick();
+            if(click == ClickType.DOUBLE_CLICK || click == ClickType.NUMBER_KEY) {
                 event.setCancelled(true);
                 return;
             }
@@ -61,6 +62,11 @@ public class MenuListeners implements Listener {
         }
 
         if(inventory instanceof AbstractMoveableMenu moveableMenu && moveableMenu.hasMoveableSlots()) {
+            if(event.getClick() == ClickType.DOUBLE_CLICK) {
+                event.setCancelled(true);
+                return;
+            }
+
             if(clickedInventory != null) {
                 if(clickedInventory.getType() == InventoryType.PLAYER) {
                     if(event.isShiftClick()) {
